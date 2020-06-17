@@ -94,15 +94,14 @@ R CMD INSTALL SplitFusion
 ```java
 python ./SplitFusion/exec/SplitFusion.py -h
 
-usage: SplitFusion.py [-h] --SplitFusionPath SPLITFUSIONPATH
-                      --refGenome REFGENOME --sample_id SAMPLE_ID
-                      --database_dir DATABASE_DIR --tool_dir TOOL_DIR 
-		      [--bam_dir BAM_DIR]
-                      [--fastq_dir FASTQ_DIR] [--panel_dir PANEL_DIR]
-                      [--r1filename R1FILENAME] [--r2filename R2FILENAME]
-                      --output OUTPUT [--panel PANEL] [--steps STEPS]
-                      [--AnnotationMethod ANNOTATIONMETHOD]
-                      [--thread THREAD]
+usage: SplitFusion.py [-h] --refGenome REFGENOME --database_dir DATABASE_DIR
+                      --annovar ANNOVAR --samtools SAMTOOLS --bedtools
+                      BEDTOOLS --bwa BWA --R R --perl PERL --output OUTPUT
+                      --sample_id SAMPLE_ID [--bam_dir BAM_DIR]
+                      [--fastq_dir FASTQ_DIR] [--r1filename R1FILENAME]
+                      [--r2filename R2FILENAME] [--panel_dir PANEL_DIR]
+                      [--panel PANEL] [--steps STEPS]
+                      [--AnnotationMethod ANNOTATIONMETHOD] [--thread THREAD]
                       [--minMQ MINMQ] [--minMQ1 MINMQ1]
                       [--minMapLength MINMAPLENGTH]
                       [--minMapLength2 MINMAPLENGTH2]
@@ -117,15 +116,21 @@ split reads and/or paired-end reads.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --SplitFusionPath SPLITFUSIONPATH
-                        the path where Split-Fusion pipeline is installed [required]
   --refGenome REFGENOME
-                        the human genome reference [required]
-  --sample_id SAMPLE_ID
-                        the sample name of running [required]
+                        [required]. the path where human genome reference is
+                        stored
   --database_dir DATABASE_DIR
-                        the path where large databases e.g. indexed reference genome [required]
-  --tool_dir TOOL_DIR	the path where third-party tools e.g. bwa, bedtools, samtools, annovar are stored [required]
+                        [required]. the path where large databases e.g.
+                        reference genome and annotation databases are stored
+  --annovar ANNOVAR     [required]. the path of annovar
+  --samtools SAMTOOLS   [required]. the path of samtools
+  --bedtools BEDTOOLS   [required]. the path of bedtools
+  --bwa BWA             [required]. the path of bwa
+  --R R                 [required]. the path of R
+  --perl PERL           [required]. the path of perl
+  --output OUTPUT       [required]. the path where output is stored
+  --sample_id SAMPLE_ID
+                        [required]. the sample name of running
   --bam_dir BAM_DIR     the path where bam or fastq file is stored.
                         [Kickstart] The bam file of the sameple_id (xxx.bam or
                         xxx.consolidated.bam) will be used. Either fastq_dir
@@ -133,59 +138,66 @@ optional arguments:
   --fastq_dir FASTQ_DIR
                         the path where fastq file is stored. Either fastq_dir
                         or bam_dir should be specified
-  --panel_dir PANEL_DIR
-                        For Target mode: the path where panel specific files
-                        are stored, e.g. $SplitFusionPath/data/panel/.
-			(default: NA)
   --r1filename R1FILENAME
                         Read 1 fastq filename. Can be in gzipped format. If
-                        not specified, $fastq_dir/$sample_id.R1.fq will be used.
+                        not specified, $fastq_dir/$sample_id.R1.fq will be
+                        used.
   --r2filename R2FILENAME
                         Read 2 fastq filename. Can be in gzipped format. If
                         not specified, $fastq_dir/$sample_id.R2.fq will be
                         used.
-  --output OUTPUT       the path where output is stored [required]
+  --panel_dir PANEL_DIR
+                        For Target mode: the path where known significant
+                        fusions or splicing isoforms (white.list) or unwanted
+                        fusions involving homologous genes or recurrent falsed
+                        positives (black.list) are stored. default='NA'
   --panel PANEL         the prefix name of target genes panel file is stored,
-  			e.g., LungFusion for LungFusion.GSP2.bed (default: NA)
-  --steps STEPS         specify steps to run (default: 1_fastq-bam,2_bam-breakpoint,
-  			3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post)
+                        e.g., LungFusion for LungFusion.GSP2.bed. default='NA'
+  --steps STEPS         specify steps to run. default='1_fastq-bam,2_bam-
+                        breakpoint,3_breakpoint-filter,4_breakpoint-
+                        anno,5_breakpoint-anno-post'
   --AnnotationMethod ANNOTATIONMETHOD
-                        the name of annotation tools (default: annovar)
-			(annovar: http://download.openbioinformatics.org/annovar_download_form.php)
-  --thread THREAD       number of threads for computing (default: 1)
-  --minMQ MINMQ         minimum mapping quality (default: 13)
+                        the name of annotation tools. default = 'annovar'
+  --thread THREAD       number of threads for computing. default=4
+  --minMQ MINMQ         minimum mapping quality. default=13
   --minMQ1 MINMQ1       minimum mapping quality of a leftmost of Read1
-                        (rightmost of Read2)(default: 30)
+                        (rightmost of Read2). default=30
   --minMapLength MINMAPLENGTH
-                        minimum read mapping length (default: 18)
+                        minimum read mapping length. default=18
   --minMapLength2 MINMAPLENGTH2
                         minimum mapping length of rightmost of Read1 (leftmost
-                        of Read2)(default: 25)
+                        of Read2). default=25
   --maxQueryGap MAXQUERYGAP
-                        maximum gap length on a query read of split alignments (default: 0)
+                        maximum gap length on a query read of split
+                        alignments. default=0
   --maxOverlap MAXOVERLAP
-                        maximum overlap bases of two split alignments (default: 6)
+                        maximum overlap bases of two split alignments.
+                        default=6
   --minExclusive MINEXCLUSIVE
-                        minimum exclusive length between two split alignments (default: 18)
+                        minimum exclusive length between two split alignments.
+                        default=18
   --FusionMinStartSite FUSIONMINSTARTSITE
                         minimum number of Adaptor Ligation Read Starting Sites
                         to call Structure Variation/Fusion. Should be less or
-                        equal minPartnerEnds_BothExonJunction (default: 1)
+                        equal minPartnerEnds_BothExonJunction. default=1
   --minPartnerEnds_BothExonJunction MINPARTNERENDS_BOTHEXONJUNCTION
                         minimum number of fusion partner ends (ligation site),
                         when both breakpoints are at exon junctions, to call
-                        Structure Variation/Fusion (default: 1)
+                        Structure Variation/Fusion. default=1
   --minPartnerEnds_OneExonJunction MINPARTNERENDS_ONEEXONJUNCTION
                         minimum number of fusion partner ends (ligation site),
                         when one breakpoint is at exon junction, to call
-                        Structure Variation/Fusion (default: 3)
+                        Structure Variation/Fusion. default=3
 
 ```
 
 ### 2. run SplitFusion
 [An example command:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/example.command.txt)
 
-[An example data (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/)
+[An example data for test (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/)
+
+[An internal fusion library data for downloading as --panel_dir of target mode (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/panel/)
+
 ```java
 #python ./SplitFusion/exec/SplitFusion.py --SplitFusionPath SplitFusionPath --refGenome refGenome --bam_dir bam_dir --sample_id sample_id --output output --R R --perl perl --database_dir database_dir --panel_dir SplitFusionPath/data/panel/
 # I installed SplitFusion under

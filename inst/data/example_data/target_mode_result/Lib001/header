@@ -83,4 +83,4 @@
 @SQ	SN:GL000225.1	LN:211173
 @SQ	SN:GL000192.1	LN:547496
 @SQ	SN:NC_007605	LN:171823
-@PG	ID:bwa	PN:bwa	VN:0.7.17-r1188	CL:/media/storage1/tempdir/zhangbaifeng/tool/bwa mem -T 18 -t 6 /media/storage1/tempdir/zhangbaifeng/database/Homo_sapiens_assembly19.fasta /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/Lib001.R1.fq /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/Lib001.R2.fq
+@PG	ID:bwa	PN:bwa	VN:0.7.17-r1188	CL:/media/storage1/tempdir/zhangbaifeng/tool/bwa mem -T 18 -t 6 /media/storage1/tempdir/zhangbaifeng/database/Homo_sapiens_assembly19.fasta /media/storage1/tempdir/zhangbaifeng/software/SplitFusion/inst/data/example_data/Lib001.R1.fq /media/storage1/tempdir/zhangbaifeng/software/SplitFusion/inst/data/example_data/Lib001.R2.fq

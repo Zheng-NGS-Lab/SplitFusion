@@ -9,7 +9,7 @@
 [M::mem_pestat] low and high boundaries for proper pairs: (1, 245)
 [M::mem_pestat] skip orientation RF as there are not enough pairs
 [M::mem_pestat] skip orientation RR as there are not enough pairs
-[M::mem_process_seqs] Processed 20060 reads in 3.916 CPU sec, 0.665 real sec
+[M::mem_process_seqs] Processed 20060 reads in 4.068 CPU sec, 0.701 real sec
 [main] Version: 0.7.17-r1188
 [main] CMD: /media/storage1/tempdir/zhangbaifeng/tool/bwa mem -T 18 -t 6 /media/storage1/tempdir/zhangbaifeng/database/Homo_sapiens_assembly19.fasta /media/storage1/tempdir/zhangbaifeng/software/SplitFusion/inst/data/example_data/Lib001.R1.fq /media/storage1/tempdir/zhangbaifeng/software/SplitFusion/inst/data/example_data/Lib001.R2.fq
-[main] Real time: 15.427 sec; CPU: 11.256 sec
+[main] Real time: 20.191 sec; CPU: 23.556 sec
