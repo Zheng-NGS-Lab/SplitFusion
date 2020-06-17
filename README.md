@@ -4,7 +4,8 @@ Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic
 
 Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology designed, in one purpose, for robust detection of gene fusions across clinical samples of different types and varied qualities, including RNA extracted from FFPE samples.
 
-**SplitFusion** is a companion data pipeline for AMP, for the detection of gene fusion based on split alignments, i.e. reads crossing fusion breakpoints, with the ability to accurately infer in-frame or out-of-frame of fusion partners of a given fusion candidate. SplitFusion also outputs example breakpoint-supporting seqeunces in FASTA format, allowing for further investigations.
+**SplitFusion** can be used for RNA-seq data and the Anchored Multiplex PCR (AMP) data, for detecting gene fusions based on BWA-MEM split alignments, i.e. reads crossing fusion breakpoints, with the ability to accurately infer frame-ness and exon-boundary alignments for prediction functional fusions. SplitFusion also outputs example breakpoint-supporting seqeunces in FASTA and BAM format, allowing for further investigations.
+
 
 ## Reference publication
 [Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)
