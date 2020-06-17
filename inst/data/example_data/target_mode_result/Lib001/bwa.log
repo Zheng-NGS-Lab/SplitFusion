@@ -1,0 +1,15 @@
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 20060 sequences (1679257 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (6, 9304, 0, 2)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (49, 70, 98)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 196)
+[M::mem_pestat] mean and std.dev: (76.20, 34.21)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 245)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 20060 reads in 3.736 CPU sec, 0.640 real sec
+[main] Version: 0.7.17-r1188
+[main] CMD: /media/storage1/tempdir/zhangbaifeng/tool/bwa mem -T 18 -t 6 /media/storage1/tempdir/zhangbaifeng/database/Homo_sapiens_assembly19.fasta /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/Lib001.R1.fq /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/Lib001.R2.fq
+[main] Real time: 3.065 sec; CPU: 6.148 sec

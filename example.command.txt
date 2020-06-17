@@ -1,0 +1,71 @@
+# I installed SplitFusion under 
+#	/home/zz/repo/
+# Example run:
+
+##=========================================================
+## Start from FASTQ files, no panel info
+## , compatible with RNA-seq whole transcriptome analysis
+##=========================================================
+python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
+	--SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
+	--sample_id Lib001 \
+	--fastq_dir /home/zz/repo/test \
+	--database_dir /home/zz/repo/database \
+	--tool_dir /home/zz/repo/tool \
+	--r1filename "Lib001".R1.fq \
+	--r2filename "Lib001".R2.fq \
+	--output /home/zz/repo/test \
+	--refGenome Homo_sapiens_assembly19.fasta \
+	--thread 6 &
+
+
+##=========================================================
+## Kickstart mode, no panel info
+## , compatible with RNA-seq whole transcriptome analysis
+##=========================================================
+python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
+        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
+        --sample_id "Lib001" \
+        --bam_dir /home/zz/repo/test \
+        --database_dir /home/zz/repo/database \
+	--tool_dir /home/zz/repo/tool \
+        --output /home/zz/repo/test \
+        --refGenome Homo_sapiens_assembly19.fasta \
+        --thread 6 &
+
+
+##===============================
+## TARGET mode, with panel info
+##===============================
+python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
+	--SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
+	--sample_id Lib001 \
+	--fastq_dir /home/zz/repo/test \
+	--database_dir /home/zz/repo/database \
+	--tool_dir /home/zz/repo/tool \
+	--panel_dir /home/zz/repo/panel \
+	--panel LungFusion \
+	--r1filename "Lib001".R1.fq \
+	--r2filename "Lib001".R2.fq \
+	--output /home/zz/repo/test \
+	--refGenome Homo_sapiens_assembly19.fasta \
+	--thread 6 &
+
+
+##===============================
+## Selecting only some steps to run
+##===============================
+python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
+        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
+        --sample_id "Lib001" \
+        --bam_dir /home/zz/repo/test \
+        --database_dir /home/zz/repo/database \
+	--tool_dir /home/zz/repo/tool \
+        --panel_dir /home/zz/repo/panel \
+        --panel LungFusion \
+        --output /home/zz/repo/test \
+        --refGenome Homo_sapiens_assembly19.fasta \
+        --steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post" \
+        --thread 6 &
+
+

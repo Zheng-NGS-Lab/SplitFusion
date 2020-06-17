@@ -1,0 +1,11 @@
+python2 ../../software/SplitFusion/exec/SplitFusion.py \
+	--SplitFusionPath /media/storage1/tempdir/zhangbaifeng/software/anaconda3/envs/sc-tutorial/lib/R/library/SplitFusion/ \
+	--sample_id Lib001 \
+	--fastq_dir /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test \
+	--database_dir /media/storage1/tempdir/zhangbaifeng/database \
+	--tool_dir /media/storage1/tempdir/zhangbaifeng/tool \
+	--r1filename "Lib001".R1.fq \
+	--r2filename "Lib001".R2.fq \
+	--output /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/normal_mode_result \
+	--refGenome Homo_sapiens_assembly19.fasta \
+	--thread 6 &

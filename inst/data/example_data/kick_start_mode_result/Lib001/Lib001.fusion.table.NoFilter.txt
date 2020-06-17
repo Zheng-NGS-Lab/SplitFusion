@@ -1,0 +1,11 @@
+SampleID	GeneExon5_GeneExon3	frame	num_partner_ends	num_unique_reads	exon.junction	breakpoint	transcript_5	transcript_3	function_5	function_3	gene_5	cdna_5	gene_3	cdna_3	intragene	known
+Lib001	EML4_intronic---ALK_exon20	in-frame	9	11	Both	2_29446396__2_42492091	NM_019063	NM_004304	exonic	exonic	EML4	667	ALK	3171	0	0
+Lib001	EML4_exon6---ALK_exon20	in-frame	2	1	Both	2_29446396__2_42491871	NM_019063	NM_004304	exonic	exonic	EML4	667	ALK	3171	0	0
+Lib001	ZBTB38_intronic---NTRK3_exon14	N.A.	1	1	0	15_88576267__3_141132064	NM_001080412	NM_002530	intronic	exonic	ZBTB38	-	NTRK3	1406	0	0
+Lib001	GOT2_intergenic---MIR4728_ncRNA_exonic	N.A.	1	1	0	16_59021249__17_37882802	NM_002080	-	intergenic	ncRNA_exonic	GOT2	-	MIR4728	-	0	0
+Lib001	NONE_intergenic---ERBB2_exon21	N.A.	1	1	0	17_37881432__MT_5293	-	NM_004448	intergenic	exonic	NONE	-	ERBB2	2624	0	0
+Lib001	AP3B1_intronic---TP53_UTR3	N.A.	1	1	0	17_7572927__5_77381331	NM_003664	NM_000546	intronic	UTR3	AP3B1	-	TP53	-	0	0
+Lib001	SMAD4_exon2---ELMO1_intronic	N.A.	1	1	0	18_48573504__7_37248298	NM_005359	NM_014800	exonic	intronic	SMAD4	88	ELMO1	-	0	0
+Lib001	ADGRG6_intronic---SMAD4_intronic	N.A.	1	1	0	18_48575719__6_142666141	NM_020455	NM_005359	intronic	intronic	ADGRG6	-	SMAD4	-	0	0
+Lib001	MYO9B_intronic---MSH2_intronic	N.A.	1	1	0	19_17235241__2_47693990	NM_004145	NM_000251	intronic	intronic	MYO9B	-	MSH2	-	0	0
+Lib001	MSH2_exon16---IL37_intergenic	N.A.	1	1	0	2_113734357__2_47709938	NM_000251	NM_014439	exonic	intergenic	MSH2	2655	IL37	-	0	0

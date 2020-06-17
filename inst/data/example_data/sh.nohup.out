@@ -1,0 +1,193 @@
+### normal mode ###
+
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+During startup - Warning message:
+Setting LC_CTYPE failed, using "C" 
+> suppressMessages(library(SplitFusion)); runSplitFusion()
+==========
+ Mon Jun 15 11:36:12 2020 : SplitFusion started successfully.
+==========
+==========
+ Mon Jun 15 11:36:12 2020 : Starting...1_fastq-bam...
+==========
+[bam_sort_core] merging from 0 files and 6 in-memory blocks...
+==========
+ Mon Jun 15 11:38:28 2020 : 1_fastq-bam completed successfully.
+==========
+==========
+ Mon Jun 15 11:38:28 2020 : Starting...2_bam-breakpoint...
+==========
+==========
+ Mon Jun 15 11:38:29 2020 : 2_bam-breakpoint completed successfully.
+==========
+==========
+ Mon Jun 15 11:38:29 2020 : Starting...3_breakpoint-filter...
+==========
+==========
+ Mon Jun 15 11:38:29 2020 : 3_breakpoint-filter completed successfully.
+==========
+==========
+ Mon Jun 15 11:38:29 2020 : Starting...4_breakpoint-anno...
+==========
+==========
+ Mon Jun 15 11:39:10 2020 : 4_breakpoint-anno completed successfully.
+==========
+==========
+ Mon Jun 15 11:39:10 2020 : Starting...5_breakpoint-anno-post...
+==========
+==========
+ Mon Jun 15 11:39:30 2020 : 5_breakpoint-anno-post completed successfully.
+==========
+==========
+ Mon Jun 15 11:39:30 2020 : Split-Fusion completed successfully.
+==========
+> 
+> 
+
+### kick start mode ###
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+During startup - Warning message:
+Setting LC_CTYPE failed, using "C" 
+> suppressMessages(library(SplitFusion)); runSplitFusion()
+==========
+ Mon Jun 15 11:41:54 2020 : SplitFusion started successfully.
+==========
+==========
+ Mon Jun 15 11:41:54 2020 : Starting...1_fastq-bam...
+==========
+[bam_sort_core] merging from 0 files and 6 in-memory blocks...
+==========
+ Mon Jun 15 11:41:56 2020 : 1_fastq-bam completed successfully.
+==========
+==========
+ Mon Jun 15 11:41:56 2020 : Starting...2_bam-breakpoint...
+==========
+==========
+ Mon Jun 15 11:41:57 2020 : 2_bam-breakpoint completed successfully.
+==========
+==========
+ Mon Jun 15 11:41:57 2020 : Starting...3_breakpoint-filter...
+==========
+==========
+ Mon Jun 15 11:41:57 2020 : 3_breakpoint-filter completed successfully.
+==========
+==========
+ Mon Jun 15 11:41:57 2020 : Starting...4_breakpoint-anno...
+==========
+==========
+ Mon Jun 15 11:42:21 2020 : 4_breakpoint-anno completed successfully.
+==========
+==========
+ Mon Jun 15 11:42:21 2020 : Starting...5_breakpoint-anno-post...
+==========
+==========
+ Mon Jun 15 11:42:26 2020 : 5_breakpoint-anno-post completed successfully.
+==========
+==========
+ Mon Jun 15 11:42:26 2020 : Split-Fusion completed successfully.
+==========
+> 
+> 
+
+### target mode ###
+
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+During startup - Warning message:
+Setting LC_CTYPE failed, using "C" 
+> suppressMessages(library(SplitFusion)); runSplitFusion()
+==========
+ Mon Jun 15 11:45:03 2020 : SplitFusion started successfully.
+==========
+==========
+ Mon Jun 15 11:45:03 2020 : Starting...1_fastq-bam...
+==========
+[bam_sort_core] merging from 0 files and 6 in-memory blocks...
+==========
+ Mon Jun 15 11:47:43 2020 : 1_fastq-bam completed successfully.
+==========
+==========
+ Mon Jun 15 11:47:43 2020 : Starting...2_bam-breakpoint...
+==========
+==========
+ Mon Jun 15 11:47:43 2020 : 2_bam-breakpoint completed successfully.
+==========
+==========
+ Mon Jun 15 11:47:43 2020 : Starting...3_breakpoint-filter...
+==========
+join: _filter2: No such file or directory
+==========
+ Mon Jun 15 11:47:43 2020 : 3_breakpoint-filter completed successfully.
+==========
+==========
+ Mon Jun 15 11:47:43 2020 : Starting...4_breakpoint-anno...
+==========
+==========
+ Mon Jun 15 11:47:57 2020 : 4_breakpoint-anno completed successfully.
+==========
+==========
+ Mon Jun 15 11:47:57 2020 : Starting...5_breakpoint-anno-post...
+==========
+==========
+ Mon Jun 15 11:48:00 2020 : 5_breakpoint-anno-post completed successfully.
+==========
+==========
+ Mon Jun 15 11:48:00 2020 : Split-Fusion completed successfully.
+==========
+> 
+> 
+
+
+### specific step mode ###
+
+

@@ -1,0 +1,13 @@
+python2 ../../software/SplitFusion/exec/SplitFusion.py \
+	--SplitFusionPath /media/storage1/tempdir/zhangbaifeng/software/anaconda3/envs/sc-tutorial/lib/R/library/SplitFusion/ \
+	--sample_id Lib001 \
+	--bam_dir /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test \
+	--database_dir /media/storage1/tempdir/zhangbaifeng/database \
+	--panel_dir /media/storage1/tempdir/zhangbaifeng/software/anaconda3/envs/sc-tutorial/lib/R/library/SplitFusion/data/panel \
+        --panel LungFusion \
+	--output /media/storage1/tempdir/zhangbaifeng/project/splitfusion_test/specific_step_mode_result \
+	--refGenome Homo_sapiens_assembly19.fasta \
+	--R /media/storage1/tempdir/zhangbaifeng/software/anaconda3/envs/sc-tutorial/bin/R \
+	--perl /usr/bin/perl \
+	--steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post" \
+	--thread 6 &
