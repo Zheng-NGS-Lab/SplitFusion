@@ -4,6 +4,7 @@ import sys
 import re
 import os
 import argparse
+from future.utils import viewitems
 
 def parseArgs():
 
@@ -96,7 +97,7 @@ def mkdir(path):
 if __name__ == '__main__':
     
     args = parseArgs()
-    output=[str(k) + "=" + "\"" + str(v)+ "\"" for k,v in args.iteritems() if v != None]
+    output=[str(k) + "=" + "\"" + str(v)+ "\"" for k,v in viewitems(args) if v != None]
     config_p = args['output'] + "/" + args['sample_id'] + "/" 
     mkdir(config_p)
     config_o = config_p + "config.txt"
