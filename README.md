@@ -84,6 +84,9 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
 
+- Python module
+
+	pip install future
 
 
 ## Installation
@@ -95,7 +98,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 ## Run
 
-#### 1. Help (NOTE: Python 2.7 not version 3)
+#### 1. Help
 
 ```
 	python /home/user1/tools/SplitFusion/exec/SplitFusion.py -h
@@ -173,16 +176,15 @@ optional arguments:
 
 # Examples of running different modes of SplitFusion
 
+## First copy example data fiels from pipeline to local testing directory
+
+mkdir -p /home/user1/SplitFusion-test/data
+cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
+
 ##=========================================================
 ## Start from FASTQ files, no panel info
 ## , compatible with RNA-seq whole transcriptome analysis
 ##=========================================================
-mkdir -p /home/user1/SplitFusion-test/data /home/user1/SplitFusion-test/panel
-cd /home/user1/SplitFusion-test
-cp /home/user1/SplitFusion/inst/data/example_data/Lib001.* data/
-cp /home/user1/SplitFusion/inst/data/panel/* panel/
-
-
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 	--refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
 	--annovar /home/user1/tools/annovar \
@@ -209,14 +211,17 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \
         --perl /usr/bin/perl \
-        --output /home/user1/SplitFusion-test/output \
+        --output /home/user1/SplitFusion-test/kickstart-mode-output \
         --sample_id "Lib001" \
 	--bam_dir /home/user1/SplitFusion-test/data
 
 
 ##===============================
-## TARGET mode, with panel info
+## TARGET gene panel mode, with panel info
 ##===============================
+mkdir -p /home/user1/SplitFusion-test/panel
+cp /home/user1/tools/SplitFusion/inst/data/panel/* /home/user1/SplitFusion-test/panel/
+
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
         --annovar /home/user1/tools/annovar \
@@ -225,12 +230,13 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --bwa /home/user1/tools/bwa/bwa \
         --R /usr/bin/R \
         --perl /usr/bin/perl \
-        --output /home/user1/SplitFusion-test/output \
+        --output /home/user1/SplitFusion-test/target-mode-output \
         --sample_id "Lib001" \
         --fastq_dir /home/user1/SplitFusion-test/data \
         --r1filename "Lib001".R1.fq \
         --r2filename "Lib001".R2.fq \
 	--panel_dir /home/user1/SplitFusion-test/panel \
+	--thread 8 \
         --panel LungFusion
 
 

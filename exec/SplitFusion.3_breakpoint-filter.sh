@@ -103,10 +103,11 @@ fi
 			    ) {print $0,overlap} else {print $1 > "_filter1"}
 			}' breakpoint.candidates.preFilter > _sa.fu01
 
-		## reads with middle split, turn off maxQueryGap by let maxQueryGap=100
+		## For reads with middle split, turn off maxQueryGap by let maxQueryGap=1000
 		    ## left:  $9-------$10
 		    ## right:		       $19------$20
 		if [ -f breakpoint.candidates.preFilter.w.mid ]; then
+			touch _filter2
 		 echo | awk -v minMapLength=$minMapLength -v minMapLength2=$minMapLength2 -v minExclusive=$minExclusive -v maxQueryGap=1000 \
 		    '{ gap = $19-$10-1; overlap = $10-$19+1;
 			if ($1 ~ /\/1/) {mapLen1 = $10-$9+1; mapLen2 = $20-$19+1
