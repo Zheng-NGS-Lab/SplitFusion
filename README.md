@@ -19,9 +19,9 @@ The analsyis consists of the following computational steps:
 
 3. Candidate breakpoint calling.
 
-4. Initial breakpoint filtering
+4. Initial breakpoint filtering.
 
-5. Breakpoint gene annotation, frame-ness, exon boundary, further filtering and target reporting
+5. Breakpoint gene annotation, frame-ness, exon boundary, further filtering and target reporting.
 
 6. Result reporting and visualization.
 
@@ -43,10 +43,6 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac 
 		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa 
 
-- [bwa](https://sourceforge.net/projects/bio-bwa/files)
-
-- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-
 - [samtools](http://samtools.sourceforge.net)
 
 	E.g. I installed the above tools in /home/user1/tools/:
@@ -58,17 +54,24 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 			mkdir /home/user1/tools/samtools
 			./configure --prefix=/home/user1/tools/samtools
 			make; make install; cd ..
+
+- [bwa](https://sourceforge.net/projects/bio-bwa/files)
+
 		git clone https://github.com/lh3/bwa.git
 		        cd bwa; make
 			cd ..
+
+- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
+
 		wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
 			tar -zxvf bedtools-2.29.1.tar.gz
 			cd bedtools2; make
 
 - [perl](https://www.perl.org/get.html)
+
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
 
-	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar sub-directory structure should be maintained, e.g.:
+	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar sub-directory structure should be maintained, e.g. if you install annovar under /home/user1/tools:
 	
 		/home/user1/tools/annovar/annotate_variation.pl
 		

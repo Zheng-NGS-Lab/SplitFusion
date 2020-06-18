@@ -5,7 +5,6 @@
 SplitFusion.breakpoint.anno.postscript.direction.sub = function(lr3){
 n.lr3 = nrow(lr3)
 sampleID = sub(".*\\/", "", getwd())
-#if (!exists('StrVarMinStartSite')){StrVarMinStartSite=2}
 
 if (n.lr3 >0){
 	## add the 6 base back to cDNA position
@@ -235,17 +234,11 @@ if (n.lr3 >0){
 					if (file.exists(paste0(sampleID, '.consolidated.bam'))){
 						bamfile=paste0(sampleID, '.consolidated.bam')
 						}else{ bamfile=paste0(bam_dir, "/", sampleID, ".consolidated.bam")}
-#					system(paste0(path.package('SplitFusion'), "/data/Database/samtools view ", 
-					system(paste0(samtools, " view ",
-							bamfile, " | grep -f tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
+					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
 							 awk '{$3=length($2); print $0}' | sort -k1,1b -k3,3nr | sort -k1,1b -u |\
 							 cut -d ' ' -f1,2 | tr ' ' '\n' | sed 's/:umi.*//' > "
 							, sampleID, '.', gei, ".txt", sep=''))
-#					system(paste0(path.package('SplitFusion'), "/data/Database/samtools view ",   ###Modified by Baifeng###
-					system(paste0(samtools, " view ",
-#                                                        bamfile, " | grep -f tmp.readid2 | ", paste0(path.package('SplitFusion'), "/data/Database/samtools view -T "), database_dir,"/", refGenome, " -bS - > ", sampleID, '.', gei, ".bam", sep=''))
-							bamfile, " | grep -f tmp.readid2 | ", paste0(samtools, " view -T "), database_dir,"/", refGenome, " -bS - > ", sampleID, '.', gei, ".bam", sep=''))
-#					system(paste0(path.package('SplitFusion'), "/data/Database/samtools index ",   ###Modified by Baifeng###
+					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | ", paste0(samtools, " view -T "), refGenome, " -bS - > ", sampleID, '.', gei, ".bam", sep=''))
 					system(paste0(samtools, " index ",
                                                         sampleID, '.', gei, ".bam"))
 					}

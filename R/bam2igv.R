@@ -1,9 +1,3 @@
-#setwd("/Users/baizha/Desktop/KIproject/Project/Fusion/test/SplitFusion/inst/data/example_data/result/example/")
-
-
-#fq2igv <- function(config){
-  
-  #system(paste0(bwa," mem -T 18 -t ",thread," ",database_dir,"/",refGenome," ",fastq_dir,"/",r1filename," |",samtools," view -@ ",thread," -bS - > ",paste0(fastq_dir,"/",r1filename,".bam")))
   
   bam2igv <- function(bamfile,outname = bamfile, win.size=100){
     
@@ -46,16 +40,3 @@
       }
     }
   }
-  
-#  igv.bed.show(pos = 42492091,name = "EML4_intron6",chr = 2,bed = "breakpoint.reads")
-#library(parallel)
-#mclapply(list.files("./"),function(x){system(paste0(bwa," mem -T 18 -t ",thread," ",database_dir,"/",refGenome," ",fastq_dir,"/",x," |",samtools," view -@ ",thread," -bS - > ",paste0(fastq_dir,"/",x,".bam")))})
-#mclapply(list.files("./",pattern = ".bam"),function(x){igv.bam.show(bamfile = x)})
-
-#setwd("/Users/baizha/Dropbox/SplitFusion/Picture/SplitFusionManuscript/Fig4/fusion.sequences")
-#for (i in list.files("./",pattern = "Lib*.*.bam$")){
-#  igv.bam.show(bamfile = i)
-#  #Sys.sleep(5)
-#  #print(i)
-#}
-
