@@ -2,7 +2,7 @@
 
 Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
-Challenges in the diagnosis of gene fusions include very many and sometimes unknown fusion partners, poor sample quality and limited amount of available clinical specimens, and involvment of cryptic splice sites. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html))
+Challenges in the diagnosis of gene fusions include very many and sometimes unknown fusion partners, poor sample quality and limited amount of available clinical specimens, and involvment of cryptic splice sites. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)).
 
 Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric alignment (split-read) of BWA-MEM. **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
 
@@ -45,7 +45,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 - [samtools](http://samtools.sourceforge.net)
 
-	E.g. I installed the above tools in /home/user1/tools/:
+	E.g. I installed the above tool in /home/user1/tools/:
 	
 		cd /home/user1/tools
 		wget -O samtools.tar.bz2 https://sourceforge.net/projects/samtools/files/latest/download
@@ -58,8 +58,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 - [bwa](https://sourceforge.net/projects/bio-bwa/files)
 
 		git clone https://github.com/lh3/bwa.git
-		        cd bwa; make
-			cd ..
+		        cd bwa; make; cd ..
 
 - [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
 
@@ -71,7 +70,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
 
-	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar sub-directory structure should be maintained, e.g. if you install annovar under /home/user1/tools:
+	Currently, SplitFusion uses ANNOVAR, which requires a free registration. Note that the annovar sub-directory structure should be maintained, e.g. if you install annovar under /home/user1/tools:
 	
 		/home/user1/tools/annovar/annotate_variation.pl
 		
@@ -191,10 +190,10 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 	--R /usr/bin/R \
 	--perl /usr/bin/perl \
 	--output /home/user1/SplitFusion-test/output \
-	--sample_id Lib001 \
+	--sample_id "Lib001" \
 	--fastq_dir /home/user1/SplitFusion-test/data \
-	--r1filename Lib001.R1.fq \
-	--r2filename Lib001.R2.fq 
+	--r1filename "Lib001".R1.fq \
+	--r2filename "Lib001".R2.fq 
 
 
 ##=========================================================
