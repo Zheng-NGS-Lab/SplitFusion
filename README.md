@@ -84,9 +84,10 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
 
-- Python module
+- [Python](https://www.python.org/downloads/) You can download Python 2.7 or above from the [Project Page](https://www.python.org/downloads/). Then, install a Python module by [pip](https://pip.pypa.io/en/stable/installing/):
 
-	pip install future
+                pip install future
+
 
 
 ## Installation
