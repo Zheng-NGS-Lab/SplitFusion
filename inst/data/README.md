@@ -1,16 +1,8 @@
-Big data files that needed to be first downloaded from public webportal and stored under $database_dir.
-
-| Filename                   | Content                                                        |
-|:--------------------------:|:--------------------------------------------------------------:|
-| Homo_sapiens_assembly19.fasta | Contains a list of human genome reference, please mannually downloaded from ucsc or other official site. |
-| hg19_refGeneMrna.fa | File needed by ANNOVAR. |
-| hg19_refGene.txt | File needed by ANNOVAR. |
-| hg19_refGeneVersion.txt | File needed by ANNOVAR. |
-| hg19_refGeneWithVer.txt | File needed by ANNOVAR. |
-| hg19_refGeneWithVerMrna.fa | File needed by ANNOVAR. |
 
 
 For TARGET mode, panel-specific information can be used (under $panel_dir).
+
+* Whitelist
 
 | Filename                   | Content                                                        |
 |:--------------------------:|:--------------------------------------------------------------:|
@@ -18,9 +10,15 @@ For TARGET mode, panel-specific information can be used (under $panel_dir).
 | known.gene-exon.txt | By default, SplitFusion only outputs fusions that involve two different genes. This file contains clinically relevant isoforms of a gene, e.g. "MET_exon13---MET_exon15" that is an important theraputic target. Many exon skipping/alternative splicing events are normal or of unknown clinical relevance and are thus not output by default. |
 | known.partners.txt | Contains a list of known fusion partners of targets. |
 | known.3UTR.truncation.txt | Contains a list of known significant genes with 3'UTR trancation, e.g. FGFRs exon18 deletion |
+
+
+* Blacklist
+
+| Filename                   | Content                                                        |
+|:--------------------------:|:--------------------------------------------------------------:|
 | filter.gene-gene.txt | Contains recurrent breakpoints identified as data accumulates, but are not of interest. |
 
-The above files could be updated periodically as a backend supporting database that facilitates automatc filtering and outputing of fusion candidates.
+The whitelist and blacklist could be updated periodically as a backend supporting database to improve final reporting.
 
 
 Two files come with SplitFusion are premade reference gene transcripts to resolve some nomenclatural conflicts

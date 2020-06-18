@@ -186,18 +186,19 @@ cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/Spl
 ## , compatible with RNA-seq whole transcriptome analysis
 ##=========================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
-	--refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
-	--annovar /home/user1/tools/annovar \
-	--samtools /home/user1/tools/samtools/bin/samtools \
-	--bedtools /home/user1/tools/bedtools2/bin/bedtools \
-	--bwa /home/user1/tools/bwa/bwa \
-	--R /usr/bin/R \
-	--perl /usr/bin/perl \
-	--output /home/user1/SplitFusion-test/output \
-	--sample_id "Lib001" \
-	--fastq_dir /home/user1/SplitFusion-test/data \
-	--r1filename "Lib001".R1.fq \
-	--r2filename "Lib001".R2.fq 
+        --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
+        --annovar /home/user1/tools/annovar \
+        --samtools /home/user1/tools/samtools/bin/samtools \
+        --bedtools /home/user1/tools/bedtools2/bin/bedtools \
+        --bwa /home/user1/tools/bwa/bwa \
+        --R /usr/bin/R \
+        --perl /usr/bin/perl \
+        --output /home/user1/SplitFusion-test/output \
+        --sample_id "Lib001" \
+        --fastq_dir /home/user1/SplitFusion-test/data \
+        --r1filename "Lib001".R1.fq \
+        --r2filename "Lib001".R2.fq \
+        --thread 4
 
 
 ##=========================================================
@@ -210,10 +211,12 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --samtools /home/user1/tools/samtools/bin/samtools \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \
+        --R /usr/bin/R \
         --perl /usr/bin/perl \
         --output /home/user1/SplitFusion-test/kickstart-mode-output \
         --sample_id "Lib001" \
-	--bam_dir /home/user1/SplitFusion-test/data
+	--bam_dir /home/user1/SplitFusion-test/data \
+        --thread 1
 
 
 ##===============================
@@ -236,7 +239,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --r1filename "Lib001".R1.fq \
         --r2filename "Lib001".R2.fq \
 	--panel_dir /home/user1/SplitFusion-test/panel \
-	--thread 8 \
+	--thread 4 \
         --panel LungFusion
 
 
@@ -258,7 +261,8 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --r2filename "Lib001".R2.fq \
         --panel_dir /home/user1/SplitFusion-test/panel \
         --panel LungFusion \
-	--steps "1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter"
+	--steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post"
+
 ```
 
 ## Output 
