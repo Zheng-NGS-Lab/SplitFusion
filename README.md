@@ -200,9 +200,8 @@ optional arguments:
 
 ```java
 #python ./SplitFusion/exec/SplitFusion.py --SplitFusionPath SplitFusionPath --refGenome refGenome --bam_dir bam_dir --sample_id sample_id --output output --R R --perl perl --database_dir database_dir --panel_dir SplitFusionPath/data/panel/
-# I installed SplitFusion under
-#       /home/zz/repo/
-# copy ./SplitFusion/inst/data/example_data/Lib001.R1.fq ./SplitFusion/inst/data/example_data/Lib001.R2.fq /home/zz/repo/test
+# I installed SplitFusion under 
+#	/home/zz/repo/
 # Example run:
 
 ##=========================================================
@@ -210,16 +209,20 @@ optional arguments:
 ## , compatible with RNA-seq whole transcriptome analysis
 ##=========================================================
 python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
-        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
-        --sample_id "Lib001" \
-        --fastq_dir /home/zz/repo/test \
-        --database_dir /home/zz/repo/database \
-	--tool_dir /home/zz/repo/tool \
-        --r1filename "Lib001".R1.fq \
-        --r2filename "Lib001".R2.fq \
-        --output /home/zz/repo/test \
-        --refGenome Homo_sapiens_assembly19.fasta \
-        --thread 6 &
+	--refGenome Homo_sapiens_assembly19.fasta \
+	--database_dir /home/zz/repo/database \
+	--annovar /home/zz/repo/tools/annovar \
+	--samtools /home/zz/repo/tools/samtools \
+	--bedtools /home/zz/repo/tools/bedtools \
+	--bwa /home/zz/repo/tools/bwa \
+	--R /home/zz/repo/tools/R \
+	--perl /home/zz/repo/tools/perl \
+	--output /home/zz/repo/test \
+	--sample_id "Lib001"
+	--fastq_dir /home/zz/repo/test \
+	--r1filename "Lib001".R1.fq \
+	--r2filename "Lib001".R2.fq \
+	--thread 6 &
 
 
 ##=========================================================
@@ -227,13 +230,17 @@ python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
 ## , compatible with RNA-seq whole transcriptome analysis
 ##=========================================================
 python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
-        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
-        --sample_id "Lib001" \
-        --bam_dir /home/zz/repo/test \
+	--refGenome Homo_sapiens_assembly19.fasta \
         --database_dir /home/zz/repo/database \
-	--tool_dir /home/zz/repo/tool \
+        --annovar /home/zz/repo/tools/annovar \
+        --samtools /home/zz/repo/tools/samtools \
+        --bedtools /home/zz/repo/tools/bedtools \
+        --bwa /home/zz/repo/tools/bwa \
+        --R /home/zz/repo/tools/R \
+        --perl /home/zz/repo/tools/perl \
         --output /home/zz/repo/test \
-        --refGenome Homo_sapiens_assembly19.fasta \
+        --sample_id "Lib001"
+	--bam_dir /home/zz/repo/test \
         --thread 6 &
 
 
@@ -241,17 +248,21 @@ python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
 ## TARGET mode, with panel info
 ##===============================
 python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
-        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
-        --sample_id Lib001 \
-        --fastq_dir /home/zz/repo/test \
+	--refGenome Homo_sapiens_assembly19.fasta \
         --database_dir /home/zz/repo/database \
-	--tool_dir /home/zz/repo/tool \
-        --panel_dir /home/zz/repo/panel \
-        --panel LungFusion \
+        --annovar /home/zz/repo/tools/annovar \
+        --samtools /home/zz/repo/tools/samtools \
+        --bedtools /home/zz/repo/tools/bedtools \
+        --bwa /home/zz/repo/tools/bwa \
+        --R /home/zz/repo/tools/R \
+        --perl /home/zz/repo/tools/perl \
+        --output /home/zz/repo/test \
+        --sample_id "Lib001"
+        --fastq_dir /home/zz/repo/test \
         --r1filename "Lib001".R1.fq \
         --r2filename "Lib001".R2.fq \
-        --output /home/zz/repo/test \
-        --refGenome Homo_sapiens_assembly19.fasta \
+	--panel_dir /home/zz/repo/panel \
+        --panel LungFusion \
         --thread 6 &
 
 
@@ -259,16 +270,20 @@ python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
 ## Selecting only some steps to run
 ##===============================
 python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
-        --SplitFusionPath /home/zz/R/x86_64-pc-linux-gnu-library/3.5/SplitFusion \
-        --sample_id "Lib001" \
-        --bam_dir /home/zz/repo/test \
+	--refGenome Homo_sapiens_assembly19.fasta \
         --database_dir /home/zz/repo/database \
-	--tool_dir /home/zz/repo/tool \
+        --annovar /home/zz/repo/tools/annovar \
+        --samtools /home/zz/repo/tools/samtools \
+        --bedtools /home/zz/repo/tools/bedtools \
+        --bwa /home/zz/repo/tools/bwa \
+        --R /home/zz/repo/tools/R \
+        --perl /home/zz/repo/tools/perl \
+        --output /home/zz/repo/test \
+        --sample_id "Lib001"
+	--bam_dir /home/zz/repo/test \
         --panel_dir /home/zz/repo/panel \
         --panel LungFusion \
-        --output /home/zz/repo/test \
-        --refGenome Homo_sapiens_assembly19.fasta \
-        --steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post" \
+	--steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post" \
         --thread 6 &
 ```
 
