@@ -1,10 +1,12 @@
 # SplitFusion - a fast pipeline for detection of gene fusion based on fusion-supporting split alignment.
 
-Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia, EML4-ALK in lung cancer, and any of a number of partners-ROS1 in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
+Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
-Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology designed, in one purpose, for robust detection of gene fusions across clinical samples of different types and varied qualities, including RNA extracted from FFPE samples.
+Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses (Zheng, Nat. Med., 2014).
 
-**SplitFusion** can be used for RNA-seq data and the Anchored Multiplex PCR (AMP) data, for detecting gene fusions based on BWA-MEM split alignments, i.e. reads crossing fusion breakpoints, with the ability to accurately infer frame-ness and exon-boundary alignments for prediction functional fusions. SplitFusion also outputs example breakpoint-supporting seqeunces in FASTA and BAM format, allowing for further investigations.
+Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric alignment (split-read) of BWA-MEM. **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
+
+**SplitFusion** can be used for RNA-seq data and the Anchored Multiplex PCR (AMP) data.
 
 
 ## Reference publication
@@ -13,7 +15,7 @@ Challenges in the diagnosis of gene fusions include poor sample quality, limited
 ## How does SplitFusion work?  
 
 
-The analysis consists of ## computational steps:
+The analysis consists of the following computational steps:
 
 1. Reference alignment and deduplication.
 
@@ -32,59 +34,67 @@ Lastly, outputs a summary table and breakpoint-spanning reads.
 
 
 
+## Dependencies
+
+### 1. Download database and save under directory specified by --database_dir
+
+```java
+
+E.g. I save my large database files under /home/user1/database/:
+
+	cd /home/user1/database/
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
+	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
+
+```
+
+### 2. Download third-party tools 
+
+```java
+
+When running SplitFusion, you can specify paths to the tools you already have. If not, here are the tools and their links for installation.
+
+- bwa (https://sourceforge.net/projects/bio-bwa/files)
+- bedtools (https://bedtools.readthedocs.io/en/latest/content/installation.html)
+- samtools (http://samtools.sourceforge.net)
+- perl (https://www.perl.org/get.html)
+- annovar: (http://download.openbioinformatics.org/annovar_download_form.php)	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
+	annovar/annotate_variation.pl
+	annovar/table_annovar.pl
+	annovar/humandb/hg19_refGeneMrna.fa
+	annovar/humandb/hg19_refGene.txt
+
+
+- R (https://www.r-project.org/)
+	Then, install requried R packages within R:
+```java
+
+	> install.packages(c("Rcpp", "data.table", "plyr"))
+
+E.g. I installed the above tools in /home/user1/tools/:
+
+```
+	cd /home/user1/tools
+	wget https://sourceforge.net/projects/bio-bwa/files
+	wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
+		tar -zxvf bedtools-2.29.1.tar.gz
+		cd bedtools2
+		make
+
+```
+
 ## Installation
 
-### 1. Downloading database required by SplitFusion (--database_dir)
 
 ```java
-
-1. refGenome:
-
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
-wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
-
-```
-
-### 2. Downloading third-party tools required by SplitFusion
-```java
-
-1. R: download from https://www.r-project.org/
-
-2. perl: download from https://www.perl.org/get.html
-
-3. bwa: download from https://sourceforge.net/projects/bio-bwa/files/
-
-4. bedtools: download from https://bedtools.readthedocs.io/en/latest/content/installation.html
-
-5. samtools: download from http://samtools.sourceforge.net/
-
-6. annovar: http://download.openbioinformatics.org/annovar_download_form.php
-
-```
-
-### 3. Dependencies
-
-- R packages ("data.table", "plyr")
-
-
-```java
-
-> install.packages(c("data.table", "plyr"))
-
-```
-
-### 4. Installing SplitFusion
-
-```java
-wget https://github.com/Zheng-NGS-Lab/SplitFusion/archive/master.zip
-unzip master.zip
-mv SplitFusion-master SplitFusion
-R CMD INSTALL SplitFusion
+	cd /home/user1/tools/
+	git clone https://github.com/Zheng-NGS-Lab/SplitFusion.git
+	R CMD INSTALL SplitFusion
 ```
 
 
