@@ -166,21 +166,17 @@ optional arguments:
 
 ```
 
+
 #### 2. Examples
-[An example command:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/example.command.txt)
-
-[An example data for test (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/)
-
-[An internal fusion library data for downloading as --panel_dir of target mode (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/panel/)
 
 ```java
 
 # Examples of running different modes of SplitFusion
 
-## First copy example data fiels from pipeline to local testing directory
+## First copy example data fiels from pipeline to local testing directory, e.g.:
 
-mkdir -p /home/user1/SplitFusion-test/data
-cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
+	mkdir -p /home/user1/SplitFusion-test/data
+	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
 
 ##=========================================================
 ## Start from FASTQ files, no panel info
@@ -272,8 +268,8 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 
 |	SampleID	|	GeneExon5_GeneExon3	|	frame	| num_partner_ends |        num_unique_reads |        exon.junction |   breakpoint |      transcript_5 |    transcript_3 |    function_5 |      function_3 |      gene_5 |  cdna_5 |  gene_3 |  cdna_3 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Lib001 | EML4_exon6---ALK_exon20 | in-frame | 1 | 1 | Both | 2_29446396__2_42491871 | NM_019063 | NM_004304 | exonic | exonic | EML4 | 667 | ALK | 3171 |
-| Lib001 | EML4_intronic---ALK_exon20 | N.A. | 6 | 11 | One | 2_29446396__2_42492091 | NM_019063 | NM_004304 | intronic | exonic | EML4 | - | ALK | 3171 |
+| Lib001 | EML4_intronic---ALK_exon20 | in-frame | 9 | 11 | Both | 2_29446396__2_42492091 | NM_019063 | NM_004304 | intronic | exonic | EML4 | 667 | ALK | 3171 |
+| Lib001 | EML4_exon6---ALK_exon20 | in-frame | 2 | 1 | Both | 2_29446396__2_42491871 | NM_019063 | NM_004304 | exonic | exonic | EML4 | 667 | ALK | 3171 |
 
 
 
