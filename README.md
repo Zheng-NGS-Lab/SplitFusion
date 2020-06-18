@@ -43,18 +43,17 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac 
 		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa 
 
-- [bwa] (https://sourceforge.net/projects/bio-bwa/files)
+- [bwa](https://sourceforge.net/projects/bio-bwa/files)
 
-- [bedtools] (https://bedtools.readthedocs.io/en/latest/content/installation.html)
+- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
 
-- [samtools] (http://samtools.sourceforge.net)
+- [samtools](http://samtools.sourceforge.net)
 
 	E.g. I installed the above tools in /home/user1/tools/:
 	
 		cd /home/user1/tools
 		wget https://sourceforge.net/projects/bio-bwa/files
 		wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
-		
 			tar -zxvf bedtools-2.29.1.tar.gz
 			cd bedtools2
 			make
@@ -63,9 +62,13 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
 
 	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
+	
 		annovar/annotate_variation.pl
+		
 		annovar/table_annovar.pl
+		
 		annovar/humandb/hg19_refGeneMrna.fa
+		
 		annovar/humandb/hg19_refGene.txt
 
 - [R](https://www.r-project.org/)Install requried R packages within R:
