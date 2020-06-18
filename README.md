@@ -2,21 +2,16 @@
 
 Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
-Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses (Zheng, Nat. Med., 2014).
+Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html))
 
 Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric alignment (split-read) of BWA-MEM. **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
 
 **SplitFusion** can be used for RNA-seq data and the Anchored Multiplex PCR (AMP) data.
 
 
-## Reference publication
-
-[Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)
-
-
 ## How does SplitFusion work?  
 
-SplitFusion analsyis consists of the following computational steps:
+The analsyis consists of the following computational steps:
 
 1. Reference alignment and deduplication.
 
@@ -30,64 +25,52 @@ SplitFusion analsyis consists of the following computational steps:
 
 6. Result reporting and visualization.
 
-Lastly, outputs a summary table and breakpoint-spanning reads.
-
 
 ## Dependencies
 
-### 1. Download database and save under directory specified by --database_dir
+When running SplitFusion, you can specify paths to the tools and genome files you already have. If not, here are the human genome data and tools for installation.
 
-E.g. I save my large database files under /home/user1/database/:
-
-	cd /home/user1/database/
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
-	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
-
-
-### 2. Download third-party tools 
-
-When running SplitFusion, you can specify paths to the tools you already have. If not, here are the tools and their links for installation.
+- [human genome](https://data.broadinstitute.org/snowman/hg19/)
+	E.g. I save my large database files under /home/user1/database/:
+	> cd /home/user1/database/
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
+	> wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
 
 - [bwa](https://sourceforge.net/projects/bio-bwa/files)
-
 - [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-
 - [samtools](http://samtools.sourceforge.net)
+	E.g. I installed the above tools in /home/user1/tools/:
+	> cd /home/user1/tools
+	> wget https://sourceforge.net/projects/bio-bwa/files
+	> wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
+	>		tar -zxvf bedtools-2.29.1.tar.gz
+	>		cd bedtools2
+	>		make
 
 - [perl](https://www.perl.org/get.html)
-
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
-	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
-	annovar/annotate_variation.pl
-	annovar/table_annovar.pl
-	annovar/humandb/hg19_refGeneMrna.fa
-	annovar/humandb/hg19_refGene.txt
 
-- [R](https://www.r-project.org/)
-	Install requried R packages within R:
+	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
+		annovar/annotate_variation.pl
+		annovar/table_annovar.pl
+		annovar/humandb/hg19_refGeneMrna.fa
+		annovar/humandb/hg19_refGene.txt
+
+- [R](https://www.r-project.org/)Install requried R packages within R:
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
-
-E.g. I installed the above tools in /home/user1/tools/:
-
-	cd /home/user1/tools
-	wget https://sourceforge.net/projects/bio-bwa/files
-	wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
-		tar -zxvf bedtools-2.29.1.tar.gz
-		cd bedtools2
-		make
 
 
 ## Installation
 
-	cd /home/user1/tools/
-	git clone https://github.com/Zheng-NGS-Lab/SplitFusion.git
-	R CMD INSTALL SplitFusion
+	> cd /home/user1/tools/
+	> git clone https://github.com/Zheng-NGS-Lab/SplitFusion.git
+	> R CMD INSTALL SplitFusion
 
 
 ## Run
