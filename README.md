@@ -1,4 +1,4 @@
-# SplitFusion - a fast pipeline for detection of gene fusion based on fusion-supporting split alignment.
+## Introduction
 
 Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
@@ -10,12 +10,13 @@ Equally important to a robust wet lab technology is a high-performing computatio
 
 
 ## Reference publication
+
 [Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)
+
 
 ## How does SplitFusion work?  
 
-
-The analysis consists of the following computational steps:
+SplitFusion analsyis consists of the following computational steps:
 
 1. Reference alignment and deduplication.
 
@@ -29,16 +30,12 @@ The analysis consists of the following computational steps:
 
 6. Result reporting and visualization.
 
-
 Lastly, outputs a summary table and breakpoint-spanning reads.
-
 
 
 ## Dependencies
 
 ### 1. Download database and save under directory specified by --database_dir
-
-```java
 
 E.g. I save my large database files under /home/user1/database/:
 
@@ -51,34 +48,33 @@ E.g. I save my large database files under /home/user1/database/:
 	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
 	wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
 
-```
 
 ### 2. Download third-party tools 
 
-```java
-
 When running SplitFusion, you can specify paths to the tools you already have. If not, here are the tools and their links for installation.
 
-- bwa (https://sourceforge.net/projects/bio-bwa/files)
-- bedtools (https://bedtools.readthedocs.io/en/latest/content/installation.html)
-- samtools (http://samtools.sourceforge.net)
-- perl (https://www.perl.org/get.html)
-- annovar: (http://download.openbioinformatics.org/annovar_download_form.php)	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
+- [bwa](https://sourceforge.net/projects/bio-bwa/files)
+
+- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
+
+- [samtools](http://samtools.sourceforge.net)
+
+- [perl](https://www.perl.org/get.html)
+
+- [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
+	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
 	annovar/annotate_variation.pl
 	annovar/table_annovar.pl
 	annovar/humandb/hg19_refGeneMrna.fa
 	annovar/humandb/hg19_refGene.txt
 
-
-- R (https://www.r-project.org/)
-	Then, install requried R packages within R:
-```java
+- [R](https://www.r-project.org/)
+	Install requried R packages within R:
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
 
 E.g. I installed the above tools in /home/user1/tools/:
 
-```
 	cd /home/user1/tools
 	wget https://sourceforge.net/projects/bio-bwa/files
 	wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
@@ -86,23 +82,20 @@ E.g. I installed the above tools in /home/user1/tools/:
 		cd bedtools2
 		make
 
-```
 
 ## Installation
 
-
-```java
 	cd /home/user1/tools/
 	git clone https://github.com/Zheng-NGS-Lab/SplitFusion.git
 	R CMD INSTALL SplitFusion
-```
 
 
 ## Run
 
 ### 1. Help (NOTE: Python 2.7 not version 3)
-```java
-python ./SplitFusion/exec/SplitFusion.py -h
+
+```
+	python /home/user1/tools/SplitFusion/exec/SplitFusion.py -h
 
 usage: SplitFusion.py [-h] --refGenome REFGENOME --database_dir DATABASE_DIR
                       --annovar ANNOVAR --samtools SAMTOOLS --bedtools
@@ -298,12 +291,14 @@ python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
 ```
 
 ## Output 
+
 [An example brief output table:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.brief.summary)
 
 |	SampleID	|	GeneExon5_GeneExon3	|	frame	| num_partner_ends |        num_unique_reads |        exon.junction |   breakpoint |      transcript_5 |    transcript_3 |    function_5 |      function_3 |      gene_5 |  cdna_5 |  gene_3 |  cdna_3 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | Lib001 | EML4_exon6---ALK_exon20 | in-frame | 1 | 1 | Both | 2_29446396__2_42491871 | NM_019063 | NM_004304 | exonic | exonic | EML4 | 667 | ALK | 3171 |
 | Lib001 | EML4_intronic---ALK_exon20 | N.A. | 6 | 11 | One | 2_29446396__2_42492091 | NM_019063 | NM_004304 | intronic | exonic | EML4 | - | ALK | 3171 |
+
 
 [An example output fastq file for the EML4_intronic---ALK_exon20 fusion of sample Lib001 is:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.txt)
 
@@ -330,9 +325,11 @@ ATGGCTTGCAGCTCCTGGTGCTTCCGGCGGTACACTTGGCTGTTTTTTTCGCGAGTTGACATTTTTG
 
 ```
 
-## Visualization (PC or Mac)
+## Visualization (on PC or Mac)
 
 ```java
+
+Within R, run:
 
 > if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 
