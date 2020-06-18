@@ -1,8 +1,8 @@
 ## Introduction
 
-Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
+Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
-Challenges in the diagnosis of gene fusions include poor sample quality, limited amount of available clinical specimens, and complicated gene rearrangements. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html))
+Challenges in the diagnosis of gene fusions include very many and sometimes unknown fusion partners, poor sample quality and limited amount of available clinical specimens, and involvment of cryptic splice sites. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnoses ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html))
 
 Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric alignment (split-read) of BWA-MEM. **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
 
@@ -52,24 +52,31 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 	E.g. I installed the above tools in /home/user1/tools/:
 	
 		cd /home/user1/tools
-		wget https://sourceforge.net/projects/bio-bwa/files
+		wget -O samtools.tar.bz2 https://sourceforge.net/projects/samtools/files/latest/download
+			tar -xvf samtools.tar.bz2
+			cd samtools-1.10 ## Note the samtools-x.xx version
+			mkdir /home/user1/tools/samtools
+			./configure --prefix=/home/user1/tools/samtools
+			make; make install; cd ..
+		git clone https://github.com/lh3/bwa.git
+		        cd bwa; make
+			cd ..
 		wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
 			tar -zxvf bedtools-2.29.1.tar.gz
-			cd bedtools2
-			make
+			cd bedtools2; make
 
 - [perl](https://www.perl.org/get.html)
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
 
-	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar directory structure should be maintained as follows.
+	Currently, SplitFusion uses ANNOVAR, which requires a free regitration. Note that the annovar sub-directory structure should be maintained, e.g.:
 	
-		annovar/annotate_variation.pl
+		/home/user1/tools/annovar/annotate_variation.pl
 		
-		annovar/table_annovar.pl
+		/home/user1/tools/annovar/table_annovar.pl
 		
-		annovar/humandb/hg19_refGeneMrna.fa
+		/home/user1/tools/annovar/humandb/hg19_refGeneMrna.fa
 		
-		annovar/humandb/hg19_refGene.txt
+		/home/user1/tools/annovar/humandb/hg19_refGene.txt
 
 - [R](https://www.r-project.org/) Install requried R packages within R:
 
@@ -162,29 +169,29 @@ optional arguments:
 
 ```java
 
-# I installed SplitFusion under 
-#	/home/zz/repo/
-# Example run:
+# Examples of running different modes of SplitFusion
 
 ##=========================================================
 ## Start from FASTQ files, no panel info
 ## , compatible with RNA-seq whole transcriptome analysis
 ##=========================================================
-python /home/zz/repo/SplitFusion/exec/SplitFusion.py \
-	--refGenome Homo_sapiens_assembly19.fasta \
-	--database_dir /home/zz/repo/database \
-	--annovar /home/zz/repo/tools/annovar \
-	--samtools /home/zz/repo/tools/samtools \
-	--bedtools /home/zz/repo/tools/bedtools \
-	--bwa /home/zz/repo/tools/bwa \
-	--R /home/zz/repo/tools/R \
-	--perl /home/zz/repo/tools/perl \
-	--output /home/zz/repo/test \
-	--sample_id "Lib001"
-	--fastq_dir /home/zz/repo/test \
-	--r1filename "Lib001".R1.fq \
-	--r2filename "Lib001".R2.fq \
-	--thread 6 &
+mkdir -p /home/user1/SplitFusion-test/data
+cd /home/user1/SplitFusion-test
+cp /home/user1/SplitFusion/inst/data/example_data/Lib001.R*fq data/
+
+python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
+	--refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
+	--annovar /home/user1/tools/annovar \
+	--samtools /home/user1/tools/samtools/bin/samtools \
+	--bedtools /home/user1/tools/bedtools2/bin/bedtools \
+	--bwa /home/user1/tools/bwa/bwa \
+	--R /usr/bin/R \
+	--perl /usr/bin/perl \
+	--output /home/user1/SplitFusion-test/output \
+	--sample_id Lib001 \
+	--fastq_dir /home/user1/SplitFusion-test/data \
+	--r1filename Lib001.R1.fq \
+	--r2filename Lib001.R2.fq 
 
 
 ##=========================================================
