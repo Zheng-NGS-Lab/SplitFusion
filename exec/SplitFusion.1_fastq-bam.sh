@@ -14,9 +14,9 @@ SampleId=$( pwd | sed "s:.*/::")
 	#=== If specify fastq_dir, do fasq to bam ===
 	elif [ "$fastq_dir" != "" ]; then
 		if [ "$r1filename" != "" ]; then
-			$bwa mem -T 18 -t $thread $database_dir/$refGenome $fastq_dir/$r1filename $fastq_dir/$r2filename > _raw.sam 2> bwa.log
+			$bwa mem -T 18 -t $thread $refGenome $fastq_dir/$r1filename $fastq_dir/$r2filename > _raw.sam 2> bwa.log
 		else	
-			$bwa mem -T 18 -t $thread $database_dir/$refGenome $fastq_dir/$SampleId.R1.fq $fastq_dir/$SampleId.R2.fq > _raw.sam 2> bwa.log
+			$bwa mem -T 18 -t $thread $refGenome $fastq_dir/$SampleId.R1.fq $fastq_dir/$SampleId.R2.fq > _raw.sam 2> bwa.log
 		fi
 	else 
 		echo "Must specify fastq_dir or bam_dir"
@@ -34,7 +34,7 @@ SampleId=$( pwd | sed "s:.*/::")
 			mv _raw.sam2 _raw.sam
 		fi
 
-	$samtools view -@ $thread -T $database_dir/$refGenome -bS _raw.sam > _raw.bam
+	$samtools view -@ $thread -T $refGenome -bS _raw.sam > _raw.bam
 
 	#==== Tag chr.pos (at ligation site) to umi
                 $bedtools bamtobed -cigar -i _raw.bam > _raw.bed
@@ -89,7 +89,7 @@ SampleId=$( pwd | sed "s:.*/::")
 rm _*
 grep -P '\tSA:Z:' consolidated.sam > _sa.sam
  
-$samtools view -@ $thread -T $database_dir/$refGenome -bS consolidated.sam > _consolidated.bam
+$samtools view -@ $thread -T $refGenome -bS consolidated.sam > _consolidated.bam
 $samtools sort -@ $thread _consolidated.bam -o $SampleId.consolidated.bam
 	rm consolidated.sam _consolidated.bam
 $samtools index $SampleId.consolidated.bam 

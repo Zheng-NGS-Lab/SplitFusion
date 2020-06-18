@@ -8,7 +8,7 @@ SampleId=$( pwd | sed "s:.*/::")
 		$samtools view -@ $thread $SampleId.consolidated.bam | grep -P '\tSA:Z:' > _sa.sam
 	fi
 
-	$samtools view -@ $thread -T $database_dir/$refGenome -bS _sa.sam > _sa.bam
+	$samtools view -@ $thread -T $refGenome -bS _sa.sam > _sa.bam
 	$bedtools bamtobed -cigar -i _sa.bam > _sa.bed0
 
 	## bedtools uses 0-base, change to 1-base:

@@ -9,80 +9,92 @@ def parseArgs():
 
     parser = argparse.ArgumentParser(description='Split-Fusion is a \
                     fast data analysis pipeline detects gene fusion based \
-                    on split reads and/or paired-end reads.')
+                    on chimeric split-read alignments.')
     parser.add_argument('--refGenome', required=True
-                        , help="[required]. the path where human genome reference is stored")
-    parser.add_argument('--database_dir', required=True
-                        , help="[required]. the path where large databases e.g. reference genome and annotation databases are stored")
+                        , help="The reference genome file, with a full path [required].")
     parser.add_argument('--annovar', required=True
-                        , help="[required]. the path of annovar")
+                        , help="The annovar executable file [required].")
     parser.add_argument('--samtools', required=True
-                        , help="[required]. the path of samtools")
+                        , help="The samtools executable file [required].")
     parser.add_argument('--bedtools', required=True
-                        , help="[required]. the path of bedtools")
+                        , help="The bedtools executable file [required].")
     parser.add_argument('--bwa', required=True
-                        , help="[required]. the path of bwa")
+                        , help="The bwa executable file [required].")
     parser.add_argument('--R', required=True
-                        , help="[required]. the path of R")
+                        , help="The R executable file [required].")
     parser.add_argument('--perl', required=True
-                        , help="[required]. the path of perl")
+                        , help="The perl executable file [required].")
     parser.add_argument('--output', required=True
-                        , help="[required]. the path where output is stored")
+                        , help="The directory for output SplitFusion results [required].")
     parser.add_argument('--sample_id', required=True
-                        , help="[required]. the sample name of running")
+                        , help="The name of sample to be analyzed [required].")
     parser.add_argument('--bam_dir', required=False
-                        , help="the path where bam or fastq file is stored. [Kickstart] The bam file of the sameple_id (xxx.bam or xxx.consolidated.bam) will be used. Either fastq_dir or bam_dir should be specified")
+                        , help="The path to the bam file to be analyzed. \
+                        The Kickstart mode will use the bam file ('$sample_id'.bam \
+                        or '$sample_id'.consolidated.bam) in this directory.\
+                        Either fastq_dir or bam_dir should be specified.")
     parser.add_argument('--fastq_dir', required=False
-                        , help="the path where fastq file is stored. Either fastq_dir or bam_dir should be specified")
+                        , help="The path to the fastq file to be analyzed. Either fastq_dir \
+                        or bam_dir should be specified")
     parser.add_argument('--r1filename', required=False
-                        , help="Read 1 fastq filename. Can be in gzipped format. If not specified, $fastq_dir/$sample_id.R1.fq will be used.")
+                        , help="Read 1 fastq filename. Can be in gzipped format. If not specified,\
+                        $fastq_dir/$sample_id.R1.fq will be used.")
     parser.add_argument('--r2filename', required=False
-                        , help="Read 2 fastq filename. Can be in gzipped format. If not specified, $fastq_dir/$sample_id.R2.fq will be used.")
+                        , help="Read 2 fastq filename. Can be in gzipped format. If not specified,\
+                        $fastq_dir/$sample_id.R2.fq will be used.")
     parser.add_argument('--panel_dir', required=False
                         , default='NA'
-                        , help="For Target mode: the path where known significant fusions or splicing isoforms (white.list) or unwanted fusions involving homologous genes or recurrent falsed positives (black.list) are stored. default='NA'")
+                        , help="For TARGET mode: the path where known significant fusions \
+                        or splicing isoforms (whitelist) or unwanted fusions involving homologous genes\
+                        or recurrent falsed positives (blacklist) are stored. Default='NA'")
     parser.add_argument('--panel', required=False
                         , default='NA'
-                        , help="the prefix name of target genes panel file is stored, e.g., LungFusion for LungFusion.GSP2.bed. default='NA'")
+                        , help="The prefix name of TARGET gene panel file. E.g., LungFusion for\
+                        LungFusion.GSP2.bed. Default='NA'")
     parser.add_argument('--steps', required=False
                         , default='1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post'
-			, help="specify steps to run. default='1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post'")
+			, help="Specify steps to run. Default='1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post'")
     parser.add_argument('--AnnotationMethod', required=False
                         , default = 'annovar'
-                        , help="the name of annotation tools. default = 'annovar'")
+                        , help="the name of annotation tools. Default = 'annovar'")
     parser.add_argument('--thread', type=int
-                        , default=4
-                        , help="number of threads for computing. default=4")
+                        , default=1
+                        , help="number of threads for parallel computing. Default=1")
     parser.add_argument('--minMQ', type=int
                         , default=13
-                        , help="minimum mapping quality. default=13")
+                        , help="minimum mapping quality for all split alignments\
+                        (both Ligation and Anchored ends). Default=13")
     parser.add_argument('--minMQ1', type=int
                         , default=30
-                        , help="minimum mapping quality of a leftmost of Read1 (rightmost of Read2). default=30")
+                        , help="minimum mapping quality of the leftmost of Read1 (Ligation end). Default=30")
     parser.add_argument('--minMapLength', type=int
                         , default=18
-                        , help="minimum read mapping length. default=18")
+                        , help="minimum read mapping length for all split alignments\
+                        (both Ligation and Anchored ends). Default=18")
     parser.add_argument('--minMapLength2', type=int
                         , default=25
-                        , help="minimum mapping length of rightmost of Read1 (leftmost of Read2). default=25")
+                        , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=25")
     parser.add_argument('--maxQueryGap', type=int
                         , default=0
-                        , help="maximum gap length on a query read of split alignments. default=0")
+                        , help="maximum gap length between split alignments on a query read. Default=0")
     parser.add_argument('--maxOverlap', type=int
                         , default=6
-                        , help="maximum overlap bases of two split alignments. default=6")
+                        , help="maximum overlapping bases of two split alignments on a query read. Default=6")
     parser.add_argument('--minExclusive', type=int
                         , default=18
-                        , help="minimum exclusive length between two split alignments. default=18")
+                        , help="minimum exclusive length between two split alignments. Default=18")
     parser.add_argument('--FusionMinStartSite', type=int
                         , default=1
-                        , help="minimum number of Adaptor Ligation Read Starting Sites to call Structure Variation/Fusion. Should be less or equal minPartnerEnds_BothExonJunction. default=1")
+                        , help="minimum number of fusion partner ends (ligation end) to call\
+                        CANDIDATE structure variation/fusion. Should be less or equal minPartnerEnds_BothExonJunction. Default=1")
     parser.add_argument('--minPartnerEnds_BothExonJunction', type=int
                         , default=1
-                        , help="minimum number of fusion partner ends (ligation site), when both breakpoints are at exon junctions, to call Structure Variation/Fusion. default=1")
+                        , help="minimum number of fusion partner ends (ligation end), when both breakpoints are \
+                        at exon boundaries/junctions, in the final call of structure variation/fusion. Default=1")
     parser.add_argument('--minPartnerEnds_OneExonJunction', type=int
                         , default=3
-                        , help="minimum number of fusion partner ends (ligation site), when one breakpoint is at exon junction, to call Structure Variation/Fusion. default=3")
+                        , help="minimum number of fusion partner ends (ligation end), when only one breakpoint \
+                        is at exon boundary/junction, in the final call of structure variation/fusion. Default=3")
 
     args = vars(parser.parse_args())
 
