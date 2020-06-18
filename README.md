@@ -71,7 +71,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 		
 		annovar/humandb/hg19_refGene.txt
 
-- [R](https://www.r-project.org/)Install requried R packages within R:
+- [R](https://www.r-project.org/) Install requried R packages within R:
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
 
@@ -86,7 +86,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 ## Run
 
-### 1. Help (NOTE: Python 2.7 not version 3)
+#### 1. Help (NOTE: Python 2.7 not version 3)
 
 ```
 	python /home/user1/tools/SplitFusion/exec/SplitFusion.py -h
@@ -127,70 +127,33 @@ optional arguments:
                         The name of sample to be analyzed [required].
   --bam_dir BAM_DIR     The path to the bam file to be analyzed. The Kickstart
                         mode will use the bam file ('$sample_id'.bam or
-                        '$sample_id'.consolidated.bam) in this directory.
-                        Either fastq_dir or bam_dir should be specified.
+                        '$sample_id'.consolidated.bam) in this directory
+                        [Either fastq_dir or bam_dir should be specified].
   --fastq_dir FASTQ_DIR
-                        The path to the fastq file to be analyzed. Either
-                        fastq_dir or bam_dir should be specified
+                        The path to the fastq file to be analyzed [Either
+                        fastq_dir or bam_dir should be specified].
   --r1filename R1FILENAME
                         Read 1 fastq filename. Can be in gzipped format. If
                         not specified, $fastq_dir/$sample_id.R1.fq will be
-                        used.
+                        used [optional]
   --r2filename R2FILENAME
                         Read 2 fastq filename. Can be in gzipped format. If
                         not specified, $fastq_dir/$sample_id.R2.fq will be
-                        used.
+                        used [optional].
   --panel_dir PANEL_DIR
                         For TARGET mode: the path where known significant
                         fusions or splicing isoforms (whitelist) or unwanted
                         fusions involving homologous genes or recurrent falsed
                         positives (blacklist) are stored. Default='NA'
   --panel PANEL         The prefix name of TARGET gene panel file. E.g.,
-                        LungFusion for LungFusion.GSP2.bed. Default='NA'
+                        'LungFusion' for LungFusion.GSP2.bed. Default='NA'
   --steps STEPS         Specify steps to run. Default='1_fastq-bam,2_bam-
                         breakpoint,3_breakpoint-filter,4_breakpoint-anno
                         ,5_breakpoint-anno-post'
-  --AnnotationMethod ANNOTATIONMETHOD
-                        the name of annotation tools. Default = 'annovar'
-  --thread THREAD       number of threads for parallel computing. Default=1
-  --minMQ MINMQ         minimum mapping quality for all split alignments (both
-                        Ligation and Anchored ends). Default=13
-  --minMQ1 MINMQ1       minimum mapping quality of the leftmost of Read1
-                        (Ligation end). Default=30
-  --minMapLength MINMAPLENGTH
-                        minimum read mapping length for all split alignments
-                        (both Ligation and Anchored ends). Default=18
-  --minMapLength2 MINMAPLENGTH2
-                        minimum mapping length of the leftmost of Read1
-                        (Ligation end). Default=25
-  --maxQueryGap MAXQUERYGAP
-                        maximum gap length between split alignments on a query
-                        read. Default=0
-  --maxOverlap MAXOVERLAP
-                        maximum overlapping bases of two split alignments on a
-                        query read. Default=6
-  --minExclusive MINEXCLUSIVE
-                        minimum exclusive length between two split alignments.
-                        Default=18
-  --FusionMinStartSite FUSIONMINSTARTSITE
-                        minimum number of fusion partner ends (ligation end)
-                        to call CANDIDATE structure variation/fusion. Should
-                        be less or equal minPartnerEnds_BothExonJunction.
-                        Default=1
-  --minPartnerEnds_BothExonJunction MINPARTNERENDS_BOTHEXONJUNCTION
-                        minimum number of fusion partner ends (ligation end),
-                        when both breakpoints are at exon
-                        boundaries/junctions, in the final call of structure
-                        variation/fusion. Default=1
-  --minPartnerEnds_OneExonJunction MINPARTNERENDS_ONEEXONJUNCTION
-                        minimum number of fusion partner ends (ligation end),
-                        when only one breakpoint is at exon boundary/junction,
-                        in the final call of structure variation/fusion.
-                        Default=3
 
 ```
 
-### 2. run SplitFusion
+#### 2. Examples
 [An example command:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/example.command.txt)
 
 [An example data for test (click here):](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/)
