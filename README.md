@@ -30,24 +30,31 @@ The analsyis consists of the following computational steps:
 
 When running SplitFusion, you can specify paths to the tools and genome files you already have. If not, here are the human genome data and tools for installation.
 
-- [human genome](https://data.broadinstitute.org/snowman/hg19/)
-	E.g. I save my large database files under /home/user1/database/:
-		cd /home/user1/database/
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac
-		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa
+- [human genome](https://data.broadinstitute.org/snowman/hg19/) 
 
-- [bwa](https://sourceforge.net/projects/bio-bwa/files)
-- [bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-- [samtools](http://samtools.sourceforge.net)
+	E.g. I save my large database files under /home/user1/database/:
+
+		cd /home/user1/database
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.amb 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.ann 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.bwt 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.fai 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.pac 
+		wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.sa 
+
+- [bwa] (https://sourceforge.net/projects/bio-bwa/files)
+
+- [bedtools] (https://bedtools.readthedocs.io/en/latest/content/installation.html)
+
+- [samtools] (http://samtools.sourceforge.net)
+
 	E.g. I installed the above tools in /home/user1/tools/:
+	
 		cd /home/user1/tools
 		wget https://sourceforge.net/projects/bio-bwa/files
 		wget https://github.com/arq5x/bedtools2/releases/download/v2.29.1/bedtools-2.29.1.tar.gz
+		
 			tar -zxvf bedtools-2.29.1.tar.gz
 			cd bedtools2
 			make
