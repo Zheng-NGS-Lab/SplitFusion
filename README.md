@@ -50,7 +50,7 @@ wget https://data.broadinstitute.org/snowman/hg19/Homo_sapiens_assembly19.fasta.
 
 ```
 
-### 2. Downloading third-party tools required by SplitFusion (--tool_dir)
+### 2. Downloading third-party tools required by SplitFusion
 ```java
 
 1. R: download from https://www.r-project.org/
