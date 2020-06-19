@@ -4,7 +4,7 @@ Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic
 
 Challenges in the diagnosis of gene fusions include that there could be many and sometimes unknown fusion partners, poor sample quality and limited amount of available clinical specimens, and potential involvments of cryptic splice sites. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnosis ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)).
 
-Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric split-read alignments of BWA-MEM([Li H. 2013](https://arxiv.org/abs/1303.3997)). **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA/RNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
+Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric split-read alignments of BWA-MEM ([Li H. 2013](https://arxiv.org/abs/1303.3997)). **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA/RNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
 
 **SplitFusion** can be used for RNA-seq data and the Anchored Multiplex PCR (AMP) data.
 
@@ -78,7 +78,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 	> install.packages(c("Rcpp", "data.table", "plyr"))
 
-- [Python](https://www.python.org/downloads/) You can download Python 2.7 or above from the [Official Page](https://www.python.org/downloads/). Then, install a Python module by [pip](https://pip.pypa.io/en/stable/installing/):
+- [Python](https://www.python.org/downloads/) Install a Python module by [pip](https://pip.pypa.io/en/stable/installing/):
 
 		pip install future
 
@@ -172,11 +172,6 @@ optional arguments:
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
 	
-## Index the reference genome file for BWA. Indexing is specific to algorithms. To index the human genome
-## for BWA, we apply BWA's index function on the reference genome file, e.g. Homo_sapiens_assembly19.fasta.
-## This produces five index files with the extensions amb, ann, bwt, pac and sa.
-
-	/home/user1/tools/bwa/bwa index -a bwtsw /home/user1/database/Homo_sapiens_assembly19.fasta
 
 ##=========================================================
 ## Start from FASTQ files, no panel info
@@ -303,26 +298,9 @@ ATGGCTTGCAGCTCCTGGTGCTTCCGGCGGTACACTTGGCTGTTTTTTTCGCGAGTTGACATTTTTGCTTGGTTGGTGAT
 Within R, run:
 
 > if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-
 > BiocManager::install("igvR")
-
 > library(SplitFusion)
-
-> bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam")
-
-## if the generated svg file does not include reads alignment track, which could be solved
-## by setting longer wait time (default: 5 seconds) or cleaning up the browser windows.
-## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", wait.time = 10)
-
-## Specific region of interest could be specified by setting chr and breakpoint parameter.
-## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", chr = 2, breakpoint = 42492091)
-
-## Zoom in or zoom out of Visualization also could be adjusted by increasing or decreasing win.size
-## value (default: 100).
-## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", win.size= 200)
-## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", win.size= 50)
-
-
+> bam2igv(bamfile = "/home/user1/SplitFusion-test/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam")
 
 ```
 
