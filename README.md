@@ -167,11 +167,14 @@ optional arguments:
 
 # Examples of running different modes of SplitFusion
 
-## First, copy example data files from pipeline to local testing directory, e.g.:
+## First, copy example data files from pipeline to local testing directory, E.g.:
 
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
-	
+
+## Before using BWA, the reference genome needs to be indexed. E.g.:
+
+	/home/user1/tools/bwa/bwa index -a bwtsw /home/user1/database/Homo_sapiens_assembly19.fasta
 
 ##=========================================================
 ## Start from FASTQ files, no panel info
