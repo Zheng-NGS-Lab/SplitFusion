@@ -173,7 +173,7 @@ optional arguments:
 
 # Examples of running different modes of SplitFusion
 
-## First copy example data fiels from pipeline to local testing directory, e.g.:
+## First copy example data files from pipeline to local testing directory, e.g.:
 
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
