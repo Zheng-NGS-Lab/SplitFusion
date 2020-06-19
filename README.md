@@ -172,9 +172,9 @@ optional arguments:
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
 	
-## Index the reference genome file for BWA. Indexing is specific to algorithms. To index the human genome for BWA
-## , we apply BWA's index function on the reference genome file, e.g. Homo_sapiens_assembly19.fasta. This produces
-## five index files with the extensions fai, amb, ann, bwt, pac and sa.
+## Index the reference genome file for BWA. Indexing is specific to algorithms. To index the human genome
+## for BWA, we apply BWA's index function on the reference genome file, e.g. Homo_sapiens_assembly19.fasta.
+## This produces five index files with the extensions fai, amb, ann, bwt, pac and sa.
 
 	/home/user1/tools/bwa/bwa index -a bwtsw /home/user1/database/Homo_sapiens_assembly19.fasta
 
@@ -317,7 +317,8 @@ Within R, run:
 ## Specific region of interest could be specified by setting chr and breakpoint parameter.
 ## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", chr = 2, breakpoint = 42492091)
 
-## Zoom in or zoom out of Visualization also could be adjusted by increasing or decreasing win.size value (default: 100).
+## Zoom in or zoom out of Visualization also could be adjusted by increasing or decreasing win.size
+## value (default: 100).
 ## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", win.size= 200)
 ## e.g., bam2igv(bamfile = "Lib001.EML4_intronic---ALK_exon20.bam", win.size= 50)
 
