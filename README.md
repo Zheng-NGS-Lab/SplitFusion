@@ -167,7 +167,7 @@ optional arguments:
 
 # Examples of running different modes of SplitFusion
 
-## First copy example data files from pipeline to local testing directory, e.g.:
+## First, copy example data files from pipeline to local testing directory, e.g.:
 
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
@@ -211,9 +211,9 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --thread 1
 
 
-##===============================
+##=========================================================
 ## TARGET gene panel mode, with panel info
-##===============================
+##=========================================================
 mkdir -p /home/user1/SplitFusion-test/panel
 cp /home/user1/tools/SplitFusion/inst/data/panel/* /home/user1/SplitFusion-test/panel/
 
@@ -235,9 +235,12 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --panel LungFusion
 
 
-##===============================
-## Selecting only some steps to run
-##===============================
+##=========================================================
+## Selecting only some steps to run.
+## If you have run steps 1 and 2, and just want to repeat
+## analysese from Step 3 (e.g. after changing whitelist 
+##  or blacklist), then:
+##=========================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
         --annovar /home/user1/tools/annovar \
