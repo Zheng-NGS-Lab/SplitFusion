@@ -264,7 +264,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 
 ## Output 
 
-[An example brief output table:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.brief.summary)
+[An example brief output table:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.brief.summary)
 
 |	SampleID	|	GeneExon5_GeneExon3	|	frame	| num_partner_ends |        num_unique_reads |        exon.junction |   breakpoint |      transcript_5 |    transcript_3 |    function_5 |      function_3 |      gene_5 |  cdna_5 |  gene_3 |  cdna_3 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -273,7 +273,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 
 
 
-[An example output fastq file for the EML4_intronic---ALK_exon20 fusion of sample Lib001 is:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.txt)
+[An example output fastq file for the EML4_intronic---ALK_exon20 fusion of sample Lib001 is:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.EML4_intronic---ALK_exon20.txt)
 
 ```java
 
@@ -315,9 +315,9 @@ Within R, run:
 
 ```
 
-[An visualization of the EML4 intronic fusion site:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.42492091.svg)
-![Segmentfault](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.42492091.svg)
+[An visualization of the EML4 intronic fusion site:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.42492091.svg)
+![Segmentfault](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.42492091.svg)
 
-[An visualization of the ALK exon20 fusion site:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.29446361.svg)
-![Segmentfault](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/target_mode_result/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.29446361.svg)
+[An visualization of the ALK exon20 fusion site:](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.29446361.svg)
+![Segmentfault](https://github.com/Zheng-NGS-Lab/SplitFusion/blob/master/inst/data/example_data/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam.2.29446361.svg)
 
