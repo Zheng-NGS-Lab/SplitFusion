@@ -235,12 +235,11 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --panel LungFusion
 
 
-##=========================================================
+##=======================================================================
 ## Selecting only some steps to run.
-## If you have run steps 1 and 2, and just want to repeat
-## analysese from Step 3 (e.g. after changing whitelist 
-##  or blacklist), then:
-##=========================================================
+##   If you have run Steps 1 and 2, and just want to repeat analyses from
+## the Step 3 (e.g. the whitelist/blacklist has been updated), then:
+##=======================================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
         --annovar /home/user1/tools/annovar \
@@ -257,6 +256,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --panel_dir /home/user1/SplitFusion-test/panel \
         --panel LungFusion \
 	--steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post"
+
 
 ```
 
