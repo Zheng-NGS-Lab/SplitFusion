@@ -174,7 +174,7 @@ optional arguments:
 	
 ## Index the reference genome file for BWA. Indexing is specific to algorithms. To index the human genome
 ## for BWA, we apply BWA's index function on the reference genome file, e.g. Homo_sapiens_assembly19.fasta.
-## This produces six index files with the extensions fai, amb, ann, bwt, pac and sa.
+## This produces five index files with the extensions amb, ann, bwt, pac and sa.
 
 	/home/user1/tools/bwa/bwa index -a bwtsw /home/user1/database/Homo_sapiens_assembly19.fasta
 
