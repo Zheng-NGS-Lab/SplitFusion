@@ -2,7 +2,7 @@
 
 Gene fusion is a hallmark of cancer. Many gene fusions are effective therapeutic targets such as BCR-ABL in chronic myeloid leukemia and EML4-ALK in lung cancer. Accurate detection of gene fusion plays a pivotal role in precision medicine by matching the right drugs to the right patients.
 
-Challenges in the diagnosis of gene fusions include that there could be many and sometimes unknown fusion partners, poor sample quality and limited amount of available clinical specimens, and potential involvments of cryptic splice sites. The anchored multiplex PCR (AMP) is a clinically proven technology that has accelerated gene fusion discoveries and supported robust clinical diagnosis ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)).
+Challenges in the diagnosis of gene fusions include that there could be many and sometimes unknown fusion partners, low gene expression (e.g. ALK), non fusion-specific protein expression (e.g. ROS1), potential involvments of cryptic splice sites, low sequence diversity at genomic breakpoints and associated mapping difficulty, and poor sample (poor quality, limited amount and low tumor cellularity) in clinical specimens. The anchored multiplex PCR (AMP) is a clinically proven technology that addresses all these issues and has accelerated gene fusion discoveries and supported robust clinical diagnosis ([Zheng Z, et al. Anchored multiplex PCR for targeted next-generation sequencing. Nat Med. 2014](http://www.nature.com/nm/journal/v20/n12/full/nm.3729.html)).
 
 Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions. **SplitFusion** is fast by leveraging the chimeric split-read alignments of BWA-MEM ([Li H. 2013](https://arxiv.org/abs/1303.3997)). **SplitFusion** is agnostic to known coding transcripts. **SplitFusion** is sensitive, specific, computationally efficient, and features highly desirable abilities in clinical reporting, including the capabilities to infer fusion transcript frame-ness and exon-boundary alignments; to calculate number of unique DNA/RNA fragment ligation sites; and the **SplitFusion-Target** mode allows for continuous evidence-based improvement in clinical reporting.
 
@@ -167,12 +167,12 @@ optional arguments:
 
 # Examples of running different modes of SplitFusion
 
-## First, copy example data files from pipeline to local testing directory, E.g.:
+## First, copy example data files from pipeline to local testing directory, e.g.:
 
 	mkdir -p /home/user1/SplitFusion-test/data
 	cp /home/user1/tools/SplitFusion/inst/data/example_data/Lib001.* /home/user1/SplitFusion-test/data/
 
-## Before using BWA, the reference genome needs to be indexed. E.g.:
+## Before using BWA, the reference genome needs to be indexed, e.g.:
 
 	/home/user1/tools/bwa/bwa index -a bwtsw /home/user1/database/Homo_sapiens_assembly19.fasta
 
