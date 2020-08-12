@@ -44,7 +44,7 @@ if [ -s _sa.bed ]; then
 	sed -e 's/M/ M /g' -e 's/S/ S /g' -e 's/H/ H /g' _sa.SMH1 > _sa.SMH2
 
 	    # correct D in CIGAR (1)
-	    gawk '{if ($5 ~ /M1D/){
+	    gawk '{if ($5 ~ /1D/){
 			    lenM = $3 + substr($5, 1, 1) + substr($5, 3, 3)
 			    $1= $1 + substr($5, 1, 1); 
 			    $3 = lenM; $5="_"; $6="_";
@@ -53,7 +53,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2 | sed 's/_ //g' > _sa.SMH2a
 
 	    # correct D in CIGAR (2)
-	    gawk '{if ($7 ~ /M1D/){
+	    gawk '{if ($7 ~ /1D/){
 			    lenM = $5 + substr($7, 1, 1) + substr($7, 3, 3)
 			    $1= $1 + substr($7, 1, 1); 
 			    $5 = lenM; $7="_"; $8="_";
@@ -62,7 +62,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2a | sed 's/_ //g' > _sa.SMH2b
 
 	    # correct I in CIGAR (1)
-	    gawk '{if ($5 ~ /M1I/){
+	    gawk '{if ($5 ~ /1I/){
 			    lenM = $3 - substr($5, 1, 1) + substr($5, 3, 3)
 			    $1= $1 - substr($5, 1, 1);
 			    $3 = lenM; $5="_"; $6="_";
@@ -71,7 +71,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2b | sed 's/_ //g' > _sa.SMH2c
 
 	    # correct I in CIGAR (2)
-	    gawk '{if ($7 ~ /M1I/){
+	    gawk '{if ($7 ~ /1I/){
 			    lenM = $5 - substr($7, 1, 1) + substr($7, 3, 3)
 			    $1= $1 - substr($7, 1, 1); 
 			    $5 = lenM; $7="_"; $8="_";
