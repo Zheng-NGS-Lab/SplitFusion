@@ -102,7 +102,7 @@ if [ -s _sa.bed ]; then
 	sort --parallel=$thread -k1,1b -k3,3b -k13,13n _corr.ligat1b > _corr.ligat1s
 	sort --parallel=$thread -k1,1b -u _corr.ligat1s > _corr.ligat2
 
-	gawk '{OFS="\t"; 
+	echo | gawk -v minMaplength=$minMapLength '{OFS="\t"; 
 		if ($3 ~ /\/1/){
 			if ($11 > minMapLength) ($11=1)
 		    	if ($9 == "+"){posC = 100000002 + $6 - $11
