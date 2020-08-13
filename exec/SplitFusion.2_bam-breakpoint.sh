@@ -104,7 +104,7 @@ if [ -s _sa.bed ]; then
 
 	echo | gawk -v minMapLength=$minMapLength '{OFS="\t"; 
 		if ($3 ~ /\/1/){
-			if ($11 > minMapLength) ($11=1)
+			if ($11 > minMapLength) {$11=1}
 		    	if ($9 == "+"){posC = 100000002 + $6 - $11
 				}else{ posC = 100000000 + $7 + $11}
 			}
