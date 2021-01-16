@@ -27,14 +27,12 @@ def parseArgs():
                         , help="The directory for output SplitFusion results [required].")
     parser.add_argument('--sample_id', required=True
                         , help="The name of sample to be analyzed [required].")
-    parser.add_argument('--bam_dir', required=False
-                        , help="The path to the bam file to be analyzed. The Kickstart mode will use the bam file ('$sample_id'.bam or '$sample_id'.consolidated.bam) in this directory [Either fastq_dir or bam_dir should be specified].")
-    parser.add_argument('--fastq_dir', required=False
-                        , help="The path to the fastq file to be analyzed [Either fastq_dir or bam_dir should be specified].")
-    parser.add_argument('--r1filename', required=False
-                        , help="Read 1 fastq filename. Can be in gzipped format. If not specified, $fastq_dir/$sample_id.R1.fq will be used [optional]")
-    parser.add_argument('--r2filename', required=False
-                        , help="Read 2 fastq filename. Can be in gzipped format. If not specified, $fastq_dir/$sample_id.R2.fq will be used [optional].")
+    parser.add_argument('--bam_file', required=False
+                        , help="If the bam_file is specified, the Kickstart mode will be used. [Either fastq_file or bam_file should be specified]")
+    parser.add_argument('--fastq_file1', required=False
+                        , help="The fastq file (Read 1 of paired-end) to be analyzed [Either fastq_file or bam_file should be specified].")
+    parser.add_argument('--fastq_file2', required=False
+                        , help="Read 2 of paired-end fastq file.")
     parser.add_argument('--panel_dir', required=False
                         , default='NA'
                         , help="For TARGET mode: the path where known significant fusions or splicing isoforms (whitelist) or unwanted fusions involving homologous genes or recurrent falsed positives (blacklist) are stored. Default='NA'")

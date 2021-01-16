@@ -101,8 +101,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 usage: SplitFusion.py [-h] --refGenome REFGENOME --annovar ANNOVAR --samtools
                       SAMTOOLS --bedtools BEDTOOLS --bwa BWA --R R --perl PERL
                       --output OUTPUT --sample_id SAMPLE_ID
-                      [--bam_dir BAM_DIR] [--fastq_dir FASTQ_DIR]
-                      [--r1filename R1FILENAME] [--r2filename R2FILENAME]
+                      [--bam_file BMS_FILE] [--fastq_file1 FASTQ_FILE1] [--fastq_file1 FASTQ_FILE2]
                       [--panel_dir PANEL_DIR] [--panel PANEL] [--steps STEPS]
                       [--AnnotationMethod ANNOTATIONMETHOD] [--thread THREAD]
                       [--minMQ MINMQ] [--minMQ1 MINMQ1]
@@ -132,21 +131,14 @@ optional arguments:
                         [required].
   --sample_id SAMPLE_ID
                         The name of sample to be analyzed [required].
-  --bam_dir BAM_DIR     The path to the bam file to be analyzed. The Kickstart
-                        mode will use the bam file ('$sample_id'.bam or
-                        '$sample_id'.consolidated.bam) in this directory
-                        [Either fastq_dir or bam_dir should be specified].
-  --fastq_dir FASTQ_DIR
-                        The path to the fastq file to be analyzed [Either
-                        fastq_dir or bam_dir should be specified].
-  --r1filename R1FILENAME
-                        Read 1 fastq filename. Can be in gzipped format. If
-                        not specified, $fastq_dir/$sample_id.R1.fq will be
-                        used [optional]
-  --r2filename R2FILENAME
-                        Read 2 fastq filename. Can be in gzipped format. If
-                        not specified, $fastq_dir/$sample_id.R2.fq will be
-                        used [optional].
+  --bam_file BAM_FILE   If the bam_file is specified, the Kickstart mode will
+                        be used. [Either fastq_file or bam_file should be
+                        specified]
+  --fastq_file1 FASTQ_FILE1
+                        The fastq file (Read 1 of paired-end) to be analyzed
+                        [Either fastq_file or bam_file should be specified].
+  --fastq_file2 FASTQ_FILE2
+                        Read 2 of paired-end fastq file.
   --panel_dir PANEL_DIR
                         For TARGET mode: the path where known significant
                         fusions or splicing isoforms (whitelist) or unwanted
@@ -190,11 +182,9 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --perl /usr/bin/perl \
         --output /home/user1/SplitFusion-test/output \
         --sample_id "Lib001" \
-        --fastq_dir /home/user1/SplitFusion-test/data \
-        --r1filename "Lib001".R1.fq \
-        --r2filename "Lib001".R2.fq \
+        --fastq_file1 /home/user1/SplitFusion-test/data/Lib001.R1.fq \
+        --fastq_file2 /home/user1/SplitFusion-test/data/Lib001.R2.fq \
         --thread 4
-
 
 ##=========================================================
 ## Kickstart mode, no panel info
@@ -210,9 +200,8 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --perl /usr/bin/perl \
         --output /home/user1/SplitFusion-test/kickstart-mode-output \
         --sample_id "Lib001" \
-	--bam_dir /home/user1/SplitFusion-test/data \
+	--bam_file /home/user1/SplitFusion-test/data/Lib001.bam \
         --thread 1
-
 
 ##=========================================================
 ## TARGET gene panel mode, with panel info
@@ -230,13 +219,11 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --perl /usr/bin/perl \
         --output /home/user1/SplitFusion-test/target-mode-output \
         --sample_id "Lib001" \
-        --fastq_dir /home/user1/SplitFusion-test/data \
-        --r1filename "Lib001".R1.fq \
-        --r2filename "Lib001".R2.fq \
+        --fastq_file1 /home/user1/SplitFusion-test/data/Lib001.R1.fq \
+        --fastq_file2 /home/user1/SplitFusion-test/data/Lib001.R2.fq \
 	--panel_dir /home/user1/SplitFusion-test/panel \
 	--thread 4 \
         --panel LungFusion
-
 
 ##=======================================================================
 ## Selecting only some steps to run.
@@ -253,13 +240,11 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --perl /usr/bin/perl \
         --output /home/user1/SplitFusion-test/output \
         --sample_id "Lib001" \
-        --fastq_dir /home/user1/SplitFusion-test/data \
-        --r1filename "Lib001".R1.fq \
-        --r2filename "Lib001".R2.fq \
+        --fastq_file1 /home/user1/SplitFusion-test/data/Lib001.R1.fq \
+        --fastq_file2 /home/user1/SplitFusion-test/data/Lib001.R2.fq \
         --panel_dir /home/user1/SplitFusion-test/panel \
         --panel LungFusion \
 	--steps "3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post"
-
 
 ```
 

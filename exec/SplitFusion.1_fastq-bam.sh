@@ -3,23 +3,18 @@
 . config.txt
 SampleId=$( pwd | sed "s:.*/::")
 
-	#=== [Kickstart mode] If specify bam_dir, start from bam ===
-	if [ "$bam_dir" != "" ]; then
-		if [ -s $bam_dir/$SampleId.bam ]; then
-		    $samtools view -@ $thread $bam_dir/$SampleId.bam > _raw.sam
-		elif [ -s $bam_dir/$SampleId.consolidated.bam ]; then
-		    $samtools view -@ $thread $bam_dir/$SampleId.consolidated.bam > _raw.sam
-		fi
-
-	#=== If specify fastq_dir, do fasq to bam ===
-	elif [ "$fastq_dir" != "" ]; then
-		if [ "$r1filename" != "" ]; then
-			$bwa mem -T 18 -t $thread $refGenome $fastq_dir/$r1filename $fastq_dir/$r2filename > _raw.sam 2> bwa.log
+	#=== [Kickstart mode] If specify bam_file, start from bam ===
+	if [ "$bam_file" != "" ]; then
+		    $samtools view -@ $thread $bam_file > _raw.sam
+		#=== If specify fastq_file1, then start from fastq to bam ===
+	elif [ "$fastq_file1" != "" ]; then
+		if [ "$fastq_file2" != "" ]; then
+			$bwa mem -T 18 -t $thread $refGenome $fastq_file1 $fastq_file2 > _raw.sam 2> bwa.log
 		else	
-			$bwa mem -T 18 -t $thread $refGenome $fastq_dir/$SampleId.R1.fq $fastq_dir/$SampleId.R2.fq > _raw.sam 2> bwa.log
+			$bwa mem -T 18 -t $thread $refGenome $fastq_file1 > _raw.sam 2> bwa.log
 		fi
 	else 
-		echo "Must specify fastq_dir or bam_dir"
+		echo "Must specify fastq_file or bam_file"
 		exit
 	fi
 
