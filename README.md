@@ -101,7 +101,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 usage: SplitFusion.py [-h] --refGenome REFGENOME --annovar ANNOVAR --samtools
                       SAMTOOLS --bedtools BEDTOOLS --bwa BWA --R R --perl PERL
                       --output OUTPUT --sample_id SAMPLE_ID
-                      [--bam_file BMS_FILE] [--fastq_file1 FASTQ_FILE1] [--fastq_file1 FASTQ_FILE2]
+                      [--bam_file BMS_FILE] [--fastq_file1 FASTQ_FILE1] [--fastq_file2 FASTQ_FILE2]
                       [--panel_dir PANEL_DIR] [--panel PANEL] [--steps STEPS]
                       [--AnnotationMethod ANNOTATIONMETHOD] [--thread THREAD]
                       [--minMQ MINMQ] [--minMQ1 MINMQ1]
@@ -122,13 +122,12 @@ optional arguments:
                         The reference genome file, with a full path
                         [required].
   --annovar ANNOVAR     The annovar executable file [required].
-  --samtools SAMTOOLS   The samtools executable file [required].
-  --bedtools BEDTOOLS   The bedtools executable file [required].
-  --bwa BWA             The bwa executable file [required].
-  --R R                 The R executable file [required].
-  --perl PERL           The perl executable file [required].
-  --output OUTPUT       The directory for output SplitFusion results
-                        [required].
+  --samtools SAMTOOLS   The samtools executable file with full path [Optional].
+  --bedtools BEDTOOLS   The bedtools executable file with full path [Optional].
+  --bwa BWA             The bwa executable file with full path [Optional].
+  --R R                 The R executable file with full path [Optional].
+  --perl PERL           The perl executable file with full path [Optional].
+  --output OUTPUT       The directory for output SplitFusion results [required].
   --sample_id SAMPLE_ID
                         The name of sample to be analyzed [required].
   --bam_file BAM_FILE   If the bam_file is specified, the Kickstart mode will
