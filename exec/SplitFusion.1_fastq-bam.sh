@@ -72,20 +72,12 @@ SampleId=$( pwd | sed "s:.*/::")
 	sort --parallel=$thread -k1,1b -u uniq.ligateUmi > _consolidated.readID
 
 	#=== 	join raw sam with consolidated ID ===
-		sed -e 's:\t\t:\t*\t:g' _raw.sam | sed -e 's/umi:/umi\t/' > _raw.samC
-		sort --parallel=$thread -k1,1b _raw.samC > _raw.sam.s
-			    rm _raw.samC
-     
-	join _consolidated.readID _raw.sam.s > _consolidated.sam0
-		cp header consolidated.sam
-		sed -e 's/ /:/' _consolidated.sam0 | tr ' ' '\t' | cut -f1,3- >> consolidated.sam
-		    rm _raw.sam.s
+	cp header consolidated.sam
+		sed -e 's:\t\t:\t*\t:g' _raw.sam | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b | \
+		join _consolidated.readID - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- >> consolidated.sam
 	
 rm _*
 grep -P '\tSA:Z:' consolidated.sam > _sa.sam
- 
-$samtools view -@ $thread -T $refGenome -bS consolidated.sam > _consolidated.bam
-$samtools sort -@ $thread _consolidated.bam -o $SampleId.consolidated.bam
-	rm consolidated.sam _consolidated.bam
-$samtools index $SampleId.consolidated.bam 
 
+$samtools view -@ $thread -T $refGenome -bS consolidated.sam | $samtools sort -@ $thread -o $SampleId.consolidated.bam -
+$samtools index $SampleId.consolidated.bam 
