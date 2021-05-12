@@ -25,6 +25,8 @@ Two files come with SplitFusion are premade reference gene transcripts to resolv
 
 | Filename                   | Content                                                        |
 |:--------------------------:|:--------------------------------------------------------------:|
-| refGene.mostExon.NM | For genes with multiple isoforms, selecte the one with the most number of exons. |
-| refGene0.txt | For genes with multiple isoforms, selecte the one with the smallest NM##, which is often the classic isoform. |
+| hg19_refGene.mostExon.NM | For genes with multiple isoforms, selecte the one with the most number of exons. hg19 version |
+| hg19_refGene0.txt | For genes with multiple isoforms, selecte the one with the smallest NM##, which is often the classic isoform. hg19 version |
+| hg38_refGene.mostExon.NM | For genes with multiple isoforms, selecte the one with the most number of exons. hg38 version |
+| hg38_refGene0.txt | For genes with multiple isoforms, selecte the one with the smallest NM##, which is often the classic isoform. hg38 version |
 

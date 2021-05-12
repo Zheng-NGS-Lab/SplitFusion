@@ -3,8 +3,9 @@
 
 annovar.exon.cds.extraction <- function(input){
 library("SplitFusion")
+source('config.txt')
 in.anno = input
-refNM = read.table(paste(path.package("SplitFusion"), '/data/refGene.mostExon.NM', sep=''), sep=' ', header=T, stringsAsFactors=F)
+refNM = read.table(paste(path.package("SplitFusion"), '/data/', genomeVer, '_refGene.mostExon.NM', sep=''), sep=' ', header=T, stringsAsFactors=F)
 refNM2 = refNM[,c('name2', 'name')]
 names(refNM2) = c('Gene.refGene', 'refNM')
 

@@ -35,8 +35,8 @@
 
     if [ $AnnotationMethod = "annovar" ]; then
 	awk '{print $1,$2,$2,"A","A"}' __breakpoint.for.anno0 > __breakpoint.for.anno
-	$perl $annovar/table_annovar.pl __breakpoint.for.anno $annovar/humandb/ -buildver hg19 -out __breakpoint.annotated -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
-	$R -e 'library(SplitFusion);annovar.exon.cds.extraction(input = "__breakpoint.annotated.hg19_multianno.txt")' > /dev/null 2>&1
+	$perl $annovar/table_annovar.pl __breakpoint.for.anno $annovar/humandb/ -buildver $genomeVer -out __breakpoint.annotated -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
+	$R -e "library(SplitFusion);annovar.exon.cds.extraction(input = \"__breakpoint.annotated.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
     fi
 
 
@@ -44,7 +44,7 @@
 	# under dev...
     #fi
 
-sort --parallel=$thread -k1,1b __breakpoint.annotated.hg19_multianno.txt.ext0 > __breakpoint.annotated.extr
+sort --parallel=$thread -k1,1b __breakpoint.annotated.${genomeVer}_multianno.txt.ext0 > __breakpoint.annotated.extr
 
 ## Merge annotation back to read
 	sort --parallel=$thread -k1,1b __orpLeft > __orpLeft.s
@@ -62,8 +62,8 @@ sort --parallel=$thread -k1,1b __breakpoint.annotated.hg19_multianno.txt.ext0 > 
 
 		if [ $AnnotationMethod = "annovar" ]; then
 		    tr ' ' '\t' < _mid.for.anno0 | cut -f1-5 | sort --parallel=$thread -u > _mid.for.anno
-		    $perl $annovar/table_annovar.pl _mid.for.anno $annovar/humandb/ -buildver hg19 -out _mid.anno -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
-		    $R -e 'library(SplitFusion);annovar.exon.cds.extraction(input = "_mid.anno.hg19_multianno.txt")' > /dev/null 2>&1
+		    $perl $annovar/table_annovar.pl _mid.for.anno $annovar/humandb/ -buildver $genomeVer -out _mid.anno -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
+		    $R -e "library(SplitFusion);annovar.exon.cds.extraction(input = \"_mid.anno.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
 		fi
 
 	    #if [ $AnnotationMethod = "snpEff" ]; then
@@ -71,7 +71,7 @@ sort --parallel=$thread -k1,1b __breakpoint.annotated.hg19_multianno.txt.ext0 > 
 	    #fi
 
 		tr ' ' '\t' < _mid.for.anno0 | sed 's:\t:_:' | sort --parallel=$thread -k1,1b > _mid.for.anno1
-		sort --parallel=$thread -k1,1b _mid.anno.hg19_multianno.txt.ext0 > _mid.anno.ext
+		sort --parallel=$thread -k1,1b _mid.anno.${genomeVer}_multianno.txt.ext0 > _mid.anno.ext
 		join _mid.for.anno1 _mid.anno.ext | cut -d ' ' -f2,5- > anno.mid
 		
 	fi

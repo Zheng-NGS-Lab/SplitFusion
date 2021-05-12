@@ -1,3 +1,4 @@
 MET_exon13---MET_exon15
 EGFR_exon1---EGFR_exon8
 CD274_exon4---CD274_exon6
+CIC_exon20---DUX4_exon1

@@ -1,5 +1,5 @@
   
-  bam2igv <- function(bamfile,outname = bamfile, win.size=100,chr=NULL,breakpoint=NULL,wait.time=5){
+  bam2igv <- function(bamfile,outname = bamfile, genomeVer="hg38", win.size=100,chr=NULL,breakpoint=NULL,wait.time=5){
     
     #### New version ###
   
@@ -19,7 +19,7 @@
       
     igv <- igvR()
     #setBrowserWindowTitle(igv,outname)
-    setGenome(igv, "hg19")
+    setGenome(igv, genomeVer) 
     #Sys.sleep(5)   # wait a few seconds before zooming into MEF2C
   
   

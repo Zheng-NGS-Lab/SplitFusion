@@ -1,8 +1,8 @@
-bed2igv <- function(pos,bed,name,chr,n.reads=10){
+bed2igv <- function(pos,bed,name,chr,genomeVer="hg38",n.reads=10){
     igv <- igvR()
 
     setBrowserWindowTitle(igv,name)
-    setGenome(igv, "hg19")
+    setGenome(igv, genomeVer)
 
     Sys.sleep(5)   # wait a few seconds before zooming into MEF2C
     #showGenomicRegion(igv, "EML4")

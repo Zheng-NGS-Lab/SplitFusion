@@ -53,6 +53,9 @@ def parseArgs():
     parser.add_argument('--thread', type=int
                         , default=1
                         , help="number of threads for parallel computing. Default=1")
+    parser.add_argument('--genomeVer', type=str
+                        , default="hg38"
+                        , help="genome version for annotation software. Default=hg38")
     parser.add_argument('--minMQ', type=int
                         , default=13
                         , help="minimum mapping quality for all split alignments (both Ligation and Anchored ends). Default=13")

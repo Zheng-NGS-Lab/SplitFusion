@@ -3,6 +3,7 @@
 #=====================================================================
 
 SplitFusion.breakpoint.anno.postscript.direction.sub = function(lr3){
+source('config.txt')
 n.lr3 = nrow(lr3)
 sampleID = sub(".*\\/", "", getwd())
 
@@ -122,7 +123,7 @@ if (n.lr3 >0){
 					, 'pos_R' = names(sort(table(pos_R), decreasing = TRUE)[1]))
 					
 					bk.genes = unique(c(bk2$gene_L, bk2$gene_R))
-				refGene = read.table(paste0(path.package("SplitFusion"), '/data/refGene0.txt'), header=T, sep='\t')
+				refGene = read.table(paste0(path.package("SplitFusion"), '/data/', genomeVer, '_refGene0.txt'), header=T, sep='\t')
 				refGene2 = subset(refGene, name2 %in% bk.genes)[,c('name2', 'exonStarts', 'exonEnds')]
 
 					toStarts = function(row){
@@ -233,7 +234,7 @@ if (n.lr3 >0){
 					## get fa
 					if (file.exists(paste0(sampleID, '.consolidated.bam'))){
 						bamfile=paste0(sampleID, '.consolidated.bam')
-						}else{ bamfile=paste0(bam_dir, "/", sampleID, ".consolidated.bam")}
+						}else{ bamfile=paste0(outpu, "/", sampleID, ".consolidated.bam")}
 					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
 							 awk '{$3=length($2); print $0}' | sort -k1,1b -k3,3nr | sort -k1,1b -u |\
 							 cut -d ' ' -f1,2 | tr ' ' '\n' | sed 's/:umi.*//' > "
