@@ -88,7 +88,6 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 	cd /home/user1/tools/
 	git clone https://github.com/Zheng-NGS-Lab/SplitFusion.git
-	R CMD INSTALL SplitFusion
 
 
 ## Run
@@ -289,7 +288,7 @@ Within R, run:
 
 > if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 > BiocManager::install("igvR")
-> library(SplitFusion)
+> source("SplitFusion/R/bam2igv.R")
 > bam2igv(bamfile = "/home/user1/SplitFusion-test/output/Lib001/Lib001.EML4_intronic---ALK_exon20.bam")
 
 ```

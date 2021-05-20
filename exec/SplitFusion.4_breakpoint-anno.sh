@@ -36,7 +36,7 @@
     if [ $AnnotationMethod = "annovar" ]; then
 	awk '{print $1,$2,$2,"A","A"}' __breakpoint.for.anno0 > __breakpoint.for.anno
 	$perl $annovar/table_annovar.pl __breakpoint.for.anno $annovar/humandb/ -buildver $genomeVer -out __breakpoint.annotated -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
-	$R -e "library(SplitFusion);annovar.exon.cds.extraction(input = \"__breakpoint.annotated.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
+	$R -e "source(\"${SFpath}/R/annovar.exon.cds.extraction.R\");annovar.exon.cds.extraction(input = \"__breakpoint.annotated.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
     fi
 
 
@@ -63,7 +63,7 @@ sort --parallel=$thread -k1,1b __breakpoint.annotated.${genomeVer}_multianno.txt
 		if [ $AnnotationMethod = "annovar" ]; then
 		    tr ' ' '\t' < _mid.for.anno0 | cut -f1-5 | sort --parallel=$thread -u > _mid.for.anno
 		    $perl $annovar/table_annovar.pl _mid.for.anno $annovar/humandb/ -buildver $genomeVer -out _mid.anno -remove -protocol refGene -operation g -nastring NA > /dev/null 2>&1
-		    $R -e "library(SplitFusion);annovar.exon.cds.extraction(input = \"_mid.anno.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
+		    $R -e "source(\"${SFpath}/R/annovar.exon.cds.extraction.R\");annovar.exon.cds.extraction(input = \"_mid.anno.${genomeVer}_multianno.txt\")" > /dev/null 2>&1
 		fi
 
 	    #if [ $AnnotationMethod = "snpEff" ]; then

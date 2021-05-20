@@ -7,11 +7,12 @@ SampleId=$( pwd | sed "s:.*/::")
 	if [ "$bam_file" != "" ]; then
 		    $samtools view -@ $thread $bam_file > _raw.sam
 		#=== If specify fastq_file1, then start from fastq to bam ===
+		#=== align to genome using bwa mem -q, correct primary alignment mapping quality with secondary alignment ===
 	elif [ "$fastq_file1" != "" ]; then
 		if [ "$fastq_file2" != "" ]; then
-			$bwa mem -T 18 -t $thread $refGenome $fastq_file1 $fastq_file2 > _raw.sam 2> bwa.log
+			$bwa mem -T 18 -q -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | awk 'BEGIN{OFS="\t"}{if($2<2048&&$5==0){for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6&&a[5]>0){$5=int(a[5]/2);break}}}}print}' > _raw.sam
 		else	
-			$bwa mem -T 18 -t $thread $refGenome $fastq_file1 > _raw.sam 2> bwa.log
+			$bwa mem -T 18 -q -t $thread $refGenome $fastq_file1 2> bwa.log | awk 'BEGIN{OFS="\t"}{if($2<2048&&$5==0){for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6&&a[5]>0){$5=int(a[5]/2);break}}}}print}' > _raw.sam
 		fi
 	else 
 		echo "Must specify fastq_file or bam_file"

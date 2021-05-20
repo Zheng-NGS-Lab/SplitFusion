@@ -69,8 +69,8 @@ def parseArgs():
                         , default=25
                         , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=25")
     parser.add_argument('--maxQueryGap', type=int
-                        , default=0
-                        , help="maximum gap length between split alignments on a query read. Default=0")
+                        , default=1
+                        , help="maximum gap length between split alignments on a query read. Default=1")
     parser.add_argument('--maxOverlap', type=int
                         , default=6
                         , help="maximum overlapping bases of two split alignments on a query read. Default=6")
@@ -101,19 +101,26 @@ def mkdir(path):
 
 #os.system(cleanup)
 if __name__ == '__main__':
-    
+   
+    script_path = os.path.abspath(__file__)
+    exec_dir = os.path.dirname(script_path)
+    SF_dir = os.path.dirname(exec_dir)
+    R_dir = SF_dir + "/R"
+#    sys.stdout.write("%s\n%s\n%s\n" % (script_path,exec_dir,R_dir))
+#    sys.exit(0)
     args = parseArgs()
     output=[str(k) + "=" + "\"" + str(v)+ "\"" for k,v in viewitems(args) if v != None]
     config_p = args['output'] + "/" + args['sample_id'] + "/" 
     mkdir(config_p)
     config_o = config_p + "config.txt"
     config = open(config_o, "w+")
+    print("SFpath=\"%s\"" % SF_dir, file = config, sep="\n")
     print("\n".join(output), file = config, sep="\n")
 
     config.close()
 
 #design =  args['R'] +  " -e " + "'suppressMessages(library(SplitFusion)); runSplitFusion(configFile = " + "\"" + config_o + "\"" + ")'" #+ "> /dev/null 2>&1"
-cmd =  "cd " + config_p + "; " + args['R'] +  " -e " + "'suppressMessages(library(SplitFusion)); runSplitFusion()'"
+cmd =  "cd " + config_p + "; " + args['R'] +  " -e " + "'suppressMessages(source(\"" + R_dir + "/" + "runSplitFusion.R\")); runSplitFusion()'"
 os.system(cmd)
 
 ## END

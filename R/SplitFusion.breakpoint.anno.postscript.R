@@ -14,6 +14,9 @@ options(width=204)
 options(scipen=999)
 (SampleId = sub('.*/', '', getwd()))
 source('config.txt')
+source(paste0(SFpath,"/R/SplitFusion.breakpoint.anno.postscript.mid.anno.R"))
+source(paste0(SFpath,"/R/SplitFusion.breakpoint.anno.postscript.direction.R"))
+source(paste0(SFpath,"/R/SplitFusion.breakpoint.anno.postscript.direction.sub.R"))
 
 ##====1: left-right annotations
     colnames = c('readID', 'chrorp_L', 'chr_L', 'orp_L', 'pos_L', 'strand_L'

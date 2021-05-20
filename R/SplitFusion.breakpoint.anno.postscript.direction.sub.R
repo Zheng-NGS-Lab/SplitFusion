@@ -123,7 +123,7 @@ if (n.lr3 >0){
 					, 'pos_R' = names(sort(table(pos_R), decreasing = TRUE)[1]))
 					
 					bk.genes = unique(c(bk2$gene_L, bk2$gene_R))
-				refGene = read.table(paste0(path.package("SplitFusion"), '/data/', genomeVer, '_refGene0.txt'), header=T, sep='\t')
+				refGene = read.table(paste0(SFpath, '/inst/data/', genomeVer, '_refGene0.txt'), header=T, sep='\t')
 				refGene2 = subset(refGene, name2 %in% bk.genes)[,c('name2', 'exonStarts', 'exonEnds')]
 
 					toStarts = function(row){
