@@ -23,10 +23,10 @@ SampleId=$( pwd | sed "s:.*/::")
 
 #== Consolidate reads based on unique UMI
 
-	#==== if no umi, add umi:A for compatability
+	#==== if no umi, add umi:A## for compatability, where ## is the read pair number starting from 1.
         hasUmi=$(grep -v ^@ _raw.sam | head -n 1 | cut -f 1 | grep umi: | wc -l)
 		if [ $hasUmi -eq 0 ]; then
-			grep -v ^@ _raw.sam | sed 's/\t/:umi:A\t/' > _raw.sam2
+			grep -v ^@ _raw.sam | awk '{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' > _raw.sam2
 			mv _raw.sam2 _raw.sam
 		fi
 
