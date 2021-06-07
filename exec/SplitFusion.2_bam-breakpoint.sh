@@ -5,7 +5,7 @@ SampleId=$( pwd | sed "s:.*/::")
 
 ##==== 1.1. get reads with SA
 	if [ ! -s _sa.sam ]; then
-		$samtools view -@ $thread $SampleId.consolidated.bam | grep -P '\tSA:Z:' > _sa.sam
+		$samtools view -@ $thread $SampleId.consolidated.bam | awk -F "\t" 'BEGIN{OFS="\t"}/\tSA:Z/{for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6){if(a[5]>$5){$5=int(($5+a[5])/2)}print;break}}}}' > _sa.sam
 	fi
 
 	$samtools view -@ $thread -T $refGenome -bS _sa.sam > _sa.bam
@@ -33,7 +33,7 @@ if [ -s _sa.bed ]; then
 
 ##==== 3. remove MQ low
 	echo | awk -v minMQ=$minMQ '{OFS="\t"; if ($6 >= minMQ) print $0}' _sa.len.bed > _sa.len.bed.mq
-
+#        awk -v minMQ=$minMQ '{OFS="\t"; for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6&&a[5]>0){$5=int(a[5]/2);break}} if ($5 >= minMQ) print $0}' _sa.len.bed > _sa.len.bed.mq
 ##==== 4. calculate query start, end
 	# corrected read length for small size clipping which is either
 	#===============================#

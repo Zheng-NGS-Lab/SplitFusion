@@ -10,9 +10,9 @@ SampleId=$( pwd | sed "s:.*/::")
 		#=== align to genome using bwa mem -q, correct primary alignment mapping quality with secondary alignment ===
 	elif [ "$fastq_file1" != "" ]; then
 		if [ "$fastq_file2" != "" ]; then
-			$bwa mem -T 18 -q -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | awk 'BEGIN{OFS="\t"}{if($2<2048&&$5==0){for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6&&a[5]>0){$5=int(a[5]/2);break}}}}print}' > _raw.sam
+			$bwa mem -T 18 -K 10000000 -q -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log > _raw.sam
 		else	
-			$bwa mem -T 18 -q -t $thread $refGenome $fastq_file1 2> bwa.log | awk 'BEGIN{OFS="\t"}{if($2<2048&&$5==0){for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6&&a[5]>0){$5=int(a[5]/2);break}}}}print}' > _raw.sam
+			$bwa mem -T 18 -K 10000000 -q -t $thread $refGenome $fastq_file1 2> bwa.log > _raw.sam
 		fi
 	else 
 		echo "Must specify fastq_file or bam_file"
@@ -31,6 +31,7 @@ SampleId=$( pwd | sed "s:.*/::")
 		fi
 
 	$samtools view -@ $thread -T $refGenome -bS _raw.sam > _raw.bam
+	rm _raw.sam
 
 	#==== Tag chr.pos (at ligation site) to umi
                 $bedtools bamtobed -cigar -i _raw.bam > _raw.bed
@@ -74,11 +75,12 @@ SampleId=$( pwd | sed "s:.*/::")
 
 	#=== 	join raw sam with consolidated ID ===
 	cp header consolidated.sam
-		sed -e 's:\t\t:\t*\t:g' _raw.sam | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b | \
+		$samtools view _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b | \
 		join _consolidated.readID - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- >> consolidated.sam
 	
 rm _*
-grep -P '\tSA:Z:' consolidated.sam > _sa.sam
+#grep -P '\tSA:Z:' consolidated.sam > _sa.sam
 
 $samtools view -@ $thread -T $refGenome -bS consolidated.sam | $samtools sort -@ $thread -o $SampleId.consolidated.bam -
 $samtools index $SampleId.consolidated.bam 
+rm consolidated.sam
