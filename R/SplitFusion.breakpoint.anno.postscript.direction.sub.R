@@ -89,8 +89,8 @@ if (n.lr3 >0){
 		lr32$gene_Lchr = gsub('[0-9]', '', lr32$gene_L)
 		lr32$gene_Rchr = gsub('[0-9]', '', lr32$gene_R)
 		homolog.match = function(row){
-				h1 = pmatch(row[1], row[2])
-				h2 = pmatch(row[2], row[1])
+				h1 = pmatch(substr(row[1],1,3), row[2])
+				h2 = pmatch(substr(row[2],1,3), row[1])
 				h3 = (h1 || h2)
               			return(h3)
 			}
