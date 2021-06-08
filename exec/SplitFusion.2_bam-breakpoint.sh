@@ -5,7 +5,7 @@ SampleId=$( pwd | sed "s:.*/::")
 
 ##==== 1.1. get reads with SA
 	if [ ! -s _sa.sam ]; then
-		$samtools view -@ $thread $SampleId.consolidated.bam | awk -F "\t" 'BEGIN{OFS="\t"}/\tSA:Z/{for(i=1;i<=NF;i++){if($i~/^SA:Z/){split($i,a,",");if(length(a)==6){if(a[5]>$5){$5=int(($5+a[5])/2)}print;break}}}}' > _sa.sam
+		$samtools view -@ $thread $SampleId.consolidated.bam | awk -F "\t" 'BEGIN{OFS="\t"}/\tSA:Z/{for(i=1;i<=NF;i++){if($i~/^SA:Z/){n=split($i,a,",");if(n==6){if(a[5]>$5){$5=int(($5+a[5])/2)}print;break}}}}' > _sa.sam
 	fi
 
 	$samtools view -@ $thread -T $refGenome -bS _sa.sam > _sa.bam
@@ -44,7 +44,7 @@ if [ -s _sa.bed ]; then
 	sed -e 's/M/ M /g' -e 's/S/ S /g' -e 's/H/ H /g' _sa.SMH1 > _sa.SMH2
 
 	    # correct D in CIGAR (1)
-	    gawk '{if ($5 ~ /1D/){
+	    awk '{if ($5 ~ /1D/){
 			    lenM = $3 + substr($5, 1, 1) + substr($5, 3, 3)
 			    $1= $1 + substr($5, 1, 1); 
 			    $3 = lenM; $5="_"; $6="_";
@@ -53,7 +53,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2 | sed 's/_ //g' > _sa.SMH2a
 
 	    # correct D in CIGAR (2)
-	    gawk '{if ($7 ~ /1D/){
+	    awk '{if ($7 ~ /1D/){
 			    lenM = $5 + substr($7, 1, 1) + substr($7, 3, 3)
 			    $1= $1 + substr($7, 1, 1); 
 			    $5 = lenM; $7="_"; $8="_";
@@ -62,7 +62,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2a | sed 's/_ //g' > _sa.SMH2b
 
 	    # correct I in CIGAR (1)
-	    gawk '{if ($5 ~ /1I/){
+	    awk '{if ($5 ~ /1I/){
 			    lenM = $3 - substr($5, 1, 1) + substr($5, 3, 3)
 			    $1= $1 - substr($5, 1, 1);
 			    $3 = lenM; $5="_"; $6="_";
@@ -71,7 +71,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2b | sed 's/_ //g' > _sa.SMH2c
 
 	    # correct I in CIGAR (2)
-	    gawk '{if ($7 ~ /1I/){
+	    awk '{if ($7 ~ /1I/){
 			    lenM = $5 - substr($7, 1, 1) + substr($7, 3, 3)
 			    $1= $1 - substr($7, 1, 1); 
 			    $5 = lenM; $7="_"; $8="_";
@@ -80,7 +80,7 @@ if [ -s _sa.bed ]; then
 		    }' _sa.SMH2c | sed 's/_ //g' > _sa.SMH2d
 
 
-	gawk '{if ($4=="M"){
+	awk '{if ($4=="M"){
 			if ($2=="+"){
 				start=1; end=$3
 			}else if ($2=="-"){
@@ -98,11 +98,11 @@ if [ -s _sa.bed ]; then
 
 	#=== Correcting ligate.UMI based on Read1 head or, when Read1 is not mapped, Read2 tail
 	sed -e "s/:umi:/\t/" -e "s/\(.*\)-\([^[:space:]]\)/\1\t\2/" _sa.SMH4s > _corr.ligat1
-	gawk '{OFS="\t"; if ($3 ~ /\/1/) {order=$11} else {order=-$12}; print $0,order}' _corr.ligat1 > _corr.ligat1b
+	awk '{OFS="\t"; if ($3 ~ /\/1/) {order=$11} else {order=-$12}; print $0,order}' _corr.ligat1 > _corr.ligat1b
 	sort --parallel=$thread -k1,1b -k3,3b -k13,13n _corr.ligat1b > _corr.ligat1s
 	sort --parallel=$thread -k1,1b -u _corr.ligat1s > _corr.ligat2
 
-	echo | gawk -v minMapLength=$minMapLength '{OFS="\t"; 
+	echo | awk -v minMapLength=$minMapLength '{OFS="\t"; 
 		if ($3 ~ /\/1/){
 			if ($11 > minMapLength) {$11=1}
 		    	if ($9 == "+"){posC = 100000002 + $6 - $11
@@ -136,7 +136,7 @@ if [ -s _sa.bed ]; then
 	}' _sa.SMH.corr.srt
 
 	# remove ligation.site not near Read 1 _Left
-	grep "/1" _left | sed "s/:umi:C/\t/" | sed -e "s/P/\t/" -e "s/-/\t/" | gawk '{OFS="\t";
+	grep "/1" _left | sed "s/:umi:C/\t/" | sed -e "s/P/\t/" -e "s/-/\t/" | awk '{OFS="\t";
 			diff = $3 - 100000000 - $7;
 			if (diff <0) {diff = -diff};
 			if ($2 != $6 || diff > 750000){
