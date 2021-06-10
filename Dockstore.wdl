@@ -8,6 +8,7 @@ task splitfusion {
     String outdir
     String genome
     String thread
+    String annovar
   }
 
   command {
