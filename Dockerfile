@@ -20,9 +20,9 @@ RUN pip install future \
   && Rscript -e "install.packages('data.table')" \
   && Rscript -e "install.packages('plyr')" \
   && perl -MCPAN -e 'install Pod::Usage' \
-  && mkdir /annovar && mkdir /home/prod && mkdir /data && mkdir /genome
-COPY exec /home/prod/exec
-COPY R /home/prod/R
-COPY inst /home/prod/inst
+  && mkdir /annovar && mkdir /SplitFusion && mkdir /data && mkdir /genome
+COPY exec /SplitFusion/exec
+COPY R /SplitFusion/R
+COPY inst /SplitFusion/inst
 COPY bin/samtools /usr/bin/samtools
-WORKDIR /home/prod
+WORKDIR /SplitFusion
