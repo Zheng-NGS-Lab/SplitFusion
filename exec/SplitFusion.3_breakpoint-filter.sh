@@ -8,13 +8,13 @@ SampleId=$( pwd | sed "s:.*/::")
 ##========================================
 
 if [ $panel != "NA" ]; then
-	gawk '{if ($1 ~ /\/2/ && $9 == 1) print}' breakpoint.candidates.preFilter > _preFilter.r2
-	gawk '{OFS="\t"; if ($7 == "-"){start=$5; $5=$4; $4=start};
+	awk '{if ($1 ~ /\/2/ && $9 == 1) print}' breakpoint.candidates.preFilter > _preFilter.r2
+	awk '{OFS="\t"; if ($7 == "-"){start=$5; $5=$4; $4=start};
 		print $3,$4,$5,$1,$6,$7
 		}' _preFilter.r2 > _preFilter.r2.bed
 
 		sort --parallel=$thread -k1,1n -k2,2n _preFilter.r2.bed > _preFilter.r2.srt.bed
-	$bedtools intersect -wa -wb -a $panel_dir/$panel.GSP2.bed -b _preFilter.r2.srt.bed -S > _preFilter.GSP2.bed
+	$bedtools intersect -wa -wb -a $panel_dir/${genomeVer}_${panel}.GSP2.bed -b _preFilter.r2.srt.bed -S > _preFilter.GSP2.bed
                 # anchored
                 awk '{diff1 = $8 - $2; diff2 = $9 - $3;
 		if ($6 == "-"){
@@ -44,8 +44,8 @@ if [ $panel != "NA" ]; then
 
 	##==== reads with middle split
 	if [ -f breakpoint.candidates.preFilter.w.mid ]; then	
-	    gawk '{if ($1 ~ /\/2/ && $9 == 1) print}' breakpoint.candidates.preFilter.w.mid > _preFilter.r2
-	    gawk '{OFS="\t"; if ($7 == "-"){start=$5; $5=$4; $4=start};
+	    awk '{if ($1 ~ /\/2/ && $9 == 1) print}' breakpoint.candidates.preFilter.w.mid > _preFilter.r2
+	    awk '{OFS="\t"; if ($7 == "-"){start=$5; $5=$4; $4=start};
 		    print $3,$4,$5,$1,$6,$7
 		    }' _preFilter.r2 > _preFilter.r2.bed
 
