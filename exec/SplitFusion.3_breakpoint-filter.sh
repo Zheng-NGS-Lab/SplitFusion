@@ -50,7 +50,7 @@ if [ $panel != "NA" ]; then
 		    }' _preFilter.r2 > _preFilter.r2.bed
 
 		    sort --parallel=$thread -k1,1n -k2,2n _preFilter.r2.bed > _preFilter.r2.srt.bed
-	    $bedtools intersect -wa -wb -a $panel_dir/$panel.GSP2.bed -b _preFilter.r2.srt.bed -S > _preFilter.GSP2.bed
+	    $bedtools intersect -wa -wb -a $panel_dir/${genomeVer}_${panel}.GSP2.bed -b _preFilter.r2.srt.bed -S > _preFilter.GSP2.bed
 		    # anchored
 		    awk '{diff1 = $8 - $2; diff2 = $9 - $3;
 		    if ($6 == "-"){
