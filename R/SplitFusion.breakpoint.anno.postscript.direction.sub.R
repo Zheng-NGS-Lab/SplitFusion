@@ -234,7 +234,7 @@ if (n.lr3 >0){
 					## get fa
 					if (file.exists(paste0(sampleID, '.consolidated.bam'))){
 						bamfile=paste0(sampleID, '.consolidated.bam')
-						}else{ bamfile=paste0(outpu, "/", sampleID, ".consolidated.bam")}
+						}else{ bamfile=paste0(output, "/", sampleID, ".consolidated.bam")}
 					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
 							 awk '{$3=length($2); print $0}' | sort -k1,1b -k3,3nr | sort -k1,1b -u |\
 							 cut -d ' ' -f1,2 | tr ' ' '\n' | sed 's/:umi.*//' > "
