@@ -23,7 +23,7 @@ if [ -s _sa.bed ]; then
 
 ##==== 2. Join bed and read length, and keep the longest
 ##==== 3. Filter by mapping quality
-	paste -d ' ' _sa.len _sa.bed | cut -d ' ' -f2- | cut -d ' ' -f1,5 | sort --parallel=$thread -k2,2b -k1,1nr -S $memG | sort --parallel=$thread -k2,2b -u -S $memG | sort --parallel=$thread -k2,2b | join -1 2 -2 4 - <(sort --parallel=$thread -k4,4b -S $memG _sa.bed) | $awk -v minMQ=$minMQ '{OFS="\t"; if ($6 >= minMQ) print $0}'> _sa.len.bed.mq
+	paste -d ' ' _sa.len _sa.bed | cut -d ' ' -f2- | cut -d ' ' -f1,5 | sort --parallel=$thread -k2,2b -k1,1nr -S $memG | sort --parallel=$thread -k2,2b -u -S $memG | sort --parallel=$thread -k2,2b -S $memG | join -1 2 -2 4 - <(sort --parallel=$thread -k4,4b -S $memG _sa.bed) | $awk -v minMQ=$minMQ '{OFS="\t"; if ($6 >= minMQ) print $0}'> _sa.len.bed.mq
 
 ##==== 4. calculate query start, end
 
@@ -78,7 +78,7 @@ if [ -s _sa.bed ]; then
 			}
 		} else {start=0; end=0}; print start,end}' | \
 	#=== Correcting ligate.UMI based on Read1 head or, when Read1 is not mapped, Read2 tail
-	paste _sa.len.bed.mq - | tr ' ' '\t' |sort --parallel=$thread -k1,1b -k9,9n -S $memG | $awk '{n=split($1,a,"-");sub(/:umi:/,"\t",a[1]);printf "%s",a[1];for(i=2;i<n;i++){printf "-%s",a[i]}printf "\t%s",a[n];for(i=2;i<=NF;i++){printf "\t%s",$i}printf "\n"}' | $awk '{OFS="\t"; if ($3 ~ /\/1/) {order=$11} else {order=-$12}; print $0,order}' | sort --parallel=$thread -k1,1b -k3,3b -k13,13n -S $memG > _corr.ligat1s
+	paste _sa.len.bed.mq - | tr ' ' '\t' |sort --parallel=$thread -k1,1b -k9,9n -S $memG | $awk '{n=split($1,a,"-");sub(/:umi:/,"\t",a[1]);printf "%s",a[1];for(i=2;i<n;i++){sub(/:umi:/,"\t",a[i]);printf "-%s",a[i]}printf "\t%s",a[n];for(i=2;i<=NF;i++){printf "\t%s",$i}printf "\n"}' | $awk '{OFS="\t"; if ($3 ~ /\/1/) {order=$11} else {order=-$12}; print $0,order}' | sort --parallel=$thread -k1,1b -k3,3b -k13,13n -S $memG > _corr.ligat1s
 	sort --parallel=$thread -k1,1b -u -S $memG _corr.ligat1s | $awk -v minMapLength=$minMapLength '{OFS="\t"; 
 		if ($3 ~ /\/1/){
 			if ($11 > minMapLength) {$11=1}
@@ -94,7 +94,7 @@ if [ -s _sa.bed ]; then
 		print $1,$2
 		}' > corr.ligat3
 
-	join corr.ligat3 _corr.ligat1s | tr ' ' '\t' | cut -f1,2,4-13 | sed -e "s/\t/:umi:/" -e "s/\t/-/" | sort -k1,1b -k9,9n | \
+	join corr.ligat3 _corr.ligat1s | tr ' ' '\t' | cut -f1,2,4-13 | sed -e "s/\t/:umi:/" -e "s/\t/-/" | sort -k1,1b -k9,9n -S $memG | \
 ##==== 5. separate left and right split alignments
 	$awk '{if ($1==pre1){
 			n=n+1
@@ -163,7 +163,7 @@ else
 fi
 ##==== 8. correct breakpoint for those containing mid
 if [ -f split.mid ]; then
-	cut -f1 split.mid | sort --parallel=$thread -u > _mid.id
+	cut -f1 split.mid | sort --parallel=$thread -u -S $memG > _mid.id
 	sort --parallel=$thread -k2,2b -S $memG _sa.SMH4sn | join -1 1 -2 2 _mid.id - > split.mid.expanded
 
 	if [ -s split.mid.expanded ]; then
@@ -181,7 +181,7 @@ if [ -f split.mid ]; then
 
 		diff=""; bkp=""; bkp1=""; bkp2=""; q1=""; q2=""
 		pre1=$1; pre4=$4; pre5=$5; pre6=$6; pre8=$8; pre10=$10; pre11=$11
-		}' split.mid.expanded | sort --parallel=$thread -k1,1b | join -a1 _breakpoint.noFilter2 - | $awk '{if (NF==25) {$9=$24; $10=$25; $22=$23}; print}' | cut -d ' ' -f 1-22 > _breakpoint.noFilter.bkp.corrected
+		}' split.mid.expanded | sort --parallel=$thread -k1,1b -S $memG | join -a1 _breakpoint.noFilter2 - | $awk '{if (NF==25) {$9=$24; $10=$25; $22=$23}; print}' | cut -d ' ' -f 1-22 > _breakpoint.noFilter.bkp.corrected
 
 		join _breakpoint.noFilter.bkp.corrected _mid.id > breakpoint.candidates.preFilter.w.mid
 		join -v 1 _breakpoint.noFilter.bkp.corrected _mid.id > breakpoint.candidates.preFilter
