@@ -2,48 +2,65 @@
 
 . config.txt
 SampleId=$( pwd | sed "s:.*/::")
+memG=$(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024)))G
+sortmemG=$(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024 * $(echo $thread))))G
+awk=$(which mawk)
+if [ "$awk" == "" ]; then
+  awk=$(which gawk)
+  if [ "$awk" == "" ]; then
+    echo "Neither mawk nor gawk is installed in the system!"
+    exit
+  fi
+fi
 
 	#=== [Kickstart mode] If specify bam_file, start from bam ===
 	if [ "$bam_file" != "" ]; then
+                    hasUmi=$($(samtools) view $bam_file | head -n 1 | cut -f 1 | grep umi: | wc -l)
 		    $samtools view -@ $thread $bam_file > _raw.sam
 		#=== If specify fastq_file1, then start from fastq to bam ===
-		#=== align to genome using bwa mem -q, correct primary alignment mapping quality with secondary alignment ===
+		#=== align to genome using bwa mem -q, such that secondary alignment will display original mapping quality ===
 	elif [ "$fastq_file1" != "" ]; then
+		if [[ "$fastq_file1" == *.gz ]]; then
+                	hasUmi=$(zcat $fastq_file1 | head -n 1 | cut -f 1 | grep umi: | wc -l)
+		else
+			hasUmi=$(cat $fastq_file1 | head -n 1 | cut -f 1 | grep umi: | wc -l)
+		fi
 		if [ "$fastq_file2" != "" ]; then
-			$bwa mem -T 18 -K 10000000 -q -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log > _raw.sam
+	#==== if no umi, add umi:A for compatability
+			if [ $hasUmi -eq 0 ]; then
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -bS - > _raw.bam
+			else
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $samtools view -bS - > _raw.bam
+			fi
 		else	
-			$bwa mem -T 18 -K 10000000 -q -t $thread $refGenome $fastq_file1 2> bwa.log > _raw.sam
+			if [ $hasUmi -eq 0 ]; then
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -bS - > _raw.bam
+			else
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $samtools view -bS - > _raw.bam
+
+			fi
 		fi
 	else 
 		echo "Must specify fastq_file or bam_file"
 		exit
 	fi
 
-	head -n 10000 _raw.sam | grep ^@ > header
+#	$samtools view -H _raw.bam > consolidated.sam
 
 #== Consolidate reads based on unique UMI
 
-	#==== if no umi, add umi:A## for compatability, where ## is the read pair number starting from 1.
-        hasUmi=$(grep -v ^@ _raw.sam | head -n 1 | cut -f 1 | grep umi: | wc -l)
-		if [ $hasUmi -eq 0 ]; then
-			grep -v ^@ _raw.sam | awk '{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' > _raw.sam2
-			mv _raw.sam2 _raw.sam
-		fi
-
-	$samtools view -@ $thread -T $refGenome -bS _raw.sam > _raw.bam
-	rm _raw.sam
+	ligateUmiFormat=$($samtools view _raw.bam | head -n 1 | cut -f 1 | grep umi: | sed 's:.*umi:umi:' | grep C | grep P | wc -l)
 
 	#==== Tag chr.pos (at ligation site) to umi
-                $bedtools bamtobed -cigar -i _raw.bam > _raw.bed
+#                $bedtools bamtobed -cigar -i _raw.bam > _raw.bed
 
 		#==== Reformat if not already in the required ligate UMI format, which 
 		#====  has chr.pos (of ligation site) integrated in UMI (some 
 		#====  read with suppl alignments need correction for ligate site later)
-		ligateUmiFormat=$(head -n 1 _raw.bed | cut -f 4 | grep umi: | sed 's:.*umi:umi:' | grep C | grep P | wc -l)
 		    if [ $ligateUmiFormat -eq 0 ]; then
 
-			sed -e 's/:umi:/\tumi\t/' _raw.bed |\
-			gawk '{OFS="\t";
+			$bedtools bamtobed -cigar -i _raw.bam | sed -e 's/:umi:/\tumi\t/' |\
+			$awk '{OFS="\t";
 				if ($4 != preID){
 					if ($8 == "+"){
 						posC = 100000001 + $2
@@ -58,29 +75,22 @@ SampleId=$( pwd | sed "s:.*/::")
 				preUmi=umi;
 				preID=$4;
 	 
-				if ($6 ~ /N/){
-					print $4":umi",umi"-"$6 > "_id.N.umi"
-				} else {
-					print $4":umi",umi"-"$6 > "_id.ligateUmi"
+				if ($6 !~ /N/){
+					print $4":umi",umi"-"$6
 				}
-			}' 2>/dev/null
+			}' 2>/dev/null | sed 's:/[12]$::' | sort --parallel=$thread -k2,2b -u -S $memG > uniq.ligateUmi
 		    else
-			   cut -f4 _raw.bed | sed 's/umi:/umi\t/' > _id.ligateUmi 
+			   $bedtools bamtobed -cigar -i _raw.bam | cut -f4 | sed 's/umi:/umi\t/' | sed 's:/[12]$::' | sort --parallel=$thread -k2,2b -u -S $memG > uniq.ligateUmi
 		    fi
      
 	#==== consolidation
-	sed 's:/[12]$::' _id.ligateUmi >  _id.ligateUmi1
-	sort --parallel=$thread -k2,2b -u _id.ligateUmi1 > uniq.ligateUmi
-	sort --parallel=$thread -k1,1b -u uniq.ligateUmi > _consolidated.readID
-
 	#=== 	join raw sam with consolidated ID ===
-	cp header consolidated.sam
-		$samtools view _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b | \
-		join _consolidated.readID - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- >> consolidated.sam
+		$samtools view -@ $thread _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b -S $memG | \
+		join <(sort --parallel=$thread -k1,1b -u -S $memG uniq.ligateUmi) - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -
 	
-rm _*
+rm _raw.bam
 #grep -P '\tSA:Z:' consolidated.sam > _sa.sam
 
-$samtools view -@ $thread -T $refGenome -bS consolidated.sam | $samtools sort -@ $thread -o $SampleId.consolidated.bam -
+#$samtools view -@ $thread -T $refGenome -bS consolidated.sam | $samtools sort -@ $thread -o $SampleId.consolidated.bam -
 $samtools index $SampleId.consolidated.bam 
-rm consolidated.sam
+#rm consolidated.sam
