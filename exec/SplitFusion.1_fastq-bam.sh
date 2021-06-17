@@ -28,15 +28,15 @@ fi
 		if [ "$fastq_file2" != "" ]; then
 	#==== if no umi, add umi:A for compatability
 			if [ $hasUmi -eq 0 ]; then
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -bS - > _raw.bam
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
 			else
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $samtools view -bS - > _raw.bam
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
 			fi
 		else	
 			if [ $hasUmi -eq 0 ]; then
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -bS - > _raw.bam
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
 			else
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $samtools view -bS - > _raw.bam
+				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
 
 			fi
 		fi
@@ -85,9 +85,9 @@ fi
      
 	#==== consolidation
 	#=== 	join raw sam with consolidated ID ===
-		$samtools view -@ $thread _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b -S $memG | \
-		join <(sort --parallel=$thread -k1,1b -u -S $memG uniq.ligateUmi) - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -
-	
+#		$samtools view -@ $thread _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b -S $memG | \
+#		join <(sort --parallel=$thread -k1,1b -u -S $memG uniq.ligateUmi) - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -
+	$samtools view -@ $thread _raw.bam | sed -E 's/umi:\S+\t/umi\t/' | $awk -F"\t" 'BEGIN{OFS="\t";while(getline<"uniq.ligateUmi"){a[$1]=$2}}{if(a[$1]!=""){$1=sprintf("%s:%s",$1,a[$1]);print}}' | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -	
 rm _raw.bam
 #grep -P '\tSA:Z:' consolidated.sam > _sa.sam
 
