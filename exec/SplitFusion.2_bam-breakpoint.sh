@@ -97,7 +97,7 @@ if [ -s _sa.bed ]; then
 	sort --parallel=$thread -k1,1b -k9,9n _sa.SMH4 > _sa.SMH4s
 
 	#=== Correcting ligate.UMI based on Read1 head or, when Read1 is not mapped, Read2 tail
-	awk '{n=split($1,a,"-");sub(/:umi:/,"\t",a[1]);printf "%s",a[1];for(i=2;i<n;i++){sub(/:umi:/,"\t",a[i]);printf "-%s",a[i]}printf "\t%s",a[n];for(i=2;i<=NF;i++){printf "\t%s",$i}printf "\n"}' _sa.SMH4s > _corr.ligat1
+	awk '{n=split($1,a,"-");sub(/:umi:/,"\t",a[1]);printf "%s",a[1];for(i=2;i<n;i++){printf "-%s",a[i]}printf "\t%s",a[n];for(i=2;i<=NF;i++){printf "\t%s",$i}printf "\n"}' _sa.SMH4s > _corr.ligat1
 	awk '{OFS="\t"; if ($3 ~ /\/1/) {order=$11} else {order=-$12}; print $0,order}' _corr.ligat1 > _corr.ligat1b
 	sort --parallel=$thread -k1,1b -k3,3b -k13,13n _corr.ligat1b > _corr.ligat1s
 	sort --parallel=$thread -k1,1b -u _corr.ligat1s > _corr.ligat2

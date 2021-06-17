@@ -1,7 +1,7 @@
 Package: SplitFusion
 Type: Package
 Title: Detection of gene fusion based on split alignments
-Version: 0.4.0
+Version: 0.5.0
 Author: person("Baifeng", "Zhang", email = "baifeng.zhang@ki.se", role = c("aut", "cre")),person("Yee Man", "Chan", email = "yeeman.chan@ki.se", role = c("aut", "cre")),person("Zongli", "Zheng", email = "zongli.zheng@ki.se", role = c("aut", "cre"))
 Maintainer: Yee Man Chan <yeeman.chan@ki.se> Baifeng Zhang <baifeng.zhang@ki.se>
 Description: SplitFusion is a companion data pipeline for AMP, for the detection of gene fusion based on split alignments, i.e. reads crossing fusion breakpoints, with the ability to accurately infer in-frame or out-of-frame of fusion partners of a given fusion candidate. SplitFusion also outputs example breakpoint-supporting seqeunces in FASTA format, allowing for further investigations.
