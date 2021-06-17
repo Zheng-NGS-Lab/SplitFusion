@@ -2,6 +2,34 @@
 #===== Final analysis: frame status, filters, exon-junction, output
 #=====================================================================
 
+library(parallel)
+
+extractBam <- function(i,ex2,lr5) {
+source('config.txt')
+sampleID = sub(".*\\/", "", getwd())
+## get read ID
+	(gei = ex2$"GeneExon5_GeneExon3"[i])
+	(ngeci = ex2$num_unique_reads[i])
+	readids = unique(lr5$readID[lr5$ge1ge2 == gei])
+	(sample.n = min(10, ngeci, length(readids)))
+	(readid = sample(unique(lr5$readID[lr5$ge1ge2 == gei]), sample.n))
+	writeLines(readid, paste0(sampleID,'.',gei,'.tmp.readid'))
+	system(paste0('sed -e "s/:umi.*//" -e "s:/1.*::" -e "s:/2.*::" ',sampleID,'.',gei,'.tmp.readid | sort -u > ',sampleID,'.',gei,'.tmp.readid2'))
+
+## get fa
+	if (file.exists(paste0(sampleID, '.consolidated.bam'))){
+		bamfile=paste0(sampleID, '.consolidated.bam')
+	}else{ bamfile=paste0(output, "/", sampleID, ".consolidated.bam")}
+	system(paste0(samtools, " view ", bamfile, " | grep -f ",sampleID,".",gei,".tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
+		awk '{$3=length($2); print $0}' | sort -k1,1b -k3,3nr | sort -k1,1b -u |\
+		cut -d ' ' -f1,2 | tr ' ' '\n' | sed 's/:umi.*//' > "
+							, sampleID, '.', gei, ".txt", sep=''))
+	system(paste0(samtools, " view ", bamfile, " | grep -f ",sampleID,".",gei,".tmp.readid2 | ", paste0(samtools, " view -T "), refGenome, " -bS - > ", sampleID, '.', gei, ".bam", sep=''))
+	system(paste0(samtools, " index ",
+                                                        sampleID, '.', gei, ".bam"))
+	system(paste0('rm ',sampleID,'.',gei,'.tmp.readid*'))
+}
+
 SplitFusion.breakpoint.anno.postscript.direction.sub = function(lr3){
 source('config.txt')
 n.lr3 = nrow(lr3)
@@ -221,32 +249,11 @@ if (n.lr3 >0){
 			(nex = min(10, nrow(ex2)))
 			if (nex >0){
 				## show max 25 example reads 
-				for (i in 1:nex){
-					## get read ID
-					(gei = ex2$"GeneExon5_GeneExon3"[i])
-					(ngeci = ex2$num_unique_reads[i])
-					readids = unique(lr5$readID[lr5$ge1ge2 == gei])
-					(sample.n = min(10, ngeci, length(readids)))
-					(readid = sample(unique(lr5$readID[lr5$ge1ge2 == gei]), sample.n))
-					writeLines(readid, 'tmp.readid')
-					system('sed -e "s/:umi.*//" -e "s:/1.*::" -e "s:/2.*::" tmp.readid | sort -u > tmp.readid2')
-
-					## get fa
-					if (file.exists(paste0(sampleID, '.consolidated.bam'))){
-						bamfile=paste0(sampleID, '.consolidated.bam')
-						}else{ bamfile=paste0(output, "/", sampleID, ".consolidated.bam")}
-					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | cut -f1,10 | sed 's/^/>/' |\
-							 awk '{$3=length($2); print $0}' | sort -k1,1b -k3,3nr | sort -k1,1b -u |\
-							 cut -d ' ' -f1,2 | tr ' ' '\n' | sed 's/:umi.*//' > "
-							, sampleID, '.', gei, ".txt", sep=''))
-					system(paste0(samtools, " view ", bamfile, " | grep -f tmp.readid2 | ", paste0(samtools, " view -T "), refGenome, " -bS - > ", sampleID, '.', gei, ".bam", sep=''))
-					system(paste0(samtools, " index ",
-                                                        sampleID, '.', gei, ".bam"))
-					}
-				system('rm tmp.readid*')
-				}
-		       }
+				cores = min(detectCores(),as.numeric(thread))
+				mclapply(1:nex,extractBam,ex2=ex2,lr5=lr5,mc.cores=cores)
+		        }
 		}
+	}
 }
 
 ##==== make empty table for negative samples
