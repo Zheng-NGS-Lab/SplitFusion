@@ -3,7 +3,6 @@
 . config.txt
 SampleId=$( pwd | sed "s:.*/::")
 memG=$(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024)))G
-sortmemG=$(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024 * $(echo $thread))))G
 awk=$(which mawk)
 if [ "$awk" == "" ]; then
   awk=$(which gawk)
@@ -87,7 +86,27 @@ fi
 	#=== 	join raw sam with consolidated ID ===
 #		$samtools view -@ $thread _raw.bam | sed -e 's:\t\t:\t*\t:g' | sed -e 's/umi:/umi\t/' | sort --parallel=$thread -k1,1b -S $memG | \
 #		join <(sort --parallel=$thread -k1,1b -u -S $memG uniq.ligateUmi) - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -
-	$samtools view -@ $thread _raw.bam | sed -E 's/umi:\S+\t/umi\t/' | $awk -F"\t" 'BEGIN{OFS="\t";while(getline<"uniq.ligateUmi"){a[$1]=$2}}{if(a[$1]!=""){$1=sprintf("%s:%s",$1,a[$1]);print}}' | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -	
+
+# Calculate number of threads and RAM per thread for samtools sort
+# Assume 2GB RAM is used for OS and other programs
+# Roughly, RAM around the size of _raw.bam is used for the awk step
+# First, calculate number of KB RAM per thread after subtracting the
+# above two numbers.
+# If the RAM per thread calculated is larger than default 768MB,
+# then use the calculated value and also set thread to original value
+# Otherwise, reduce number of threads to the point that RAM per
+# thread is larger than 768MB
+totalmem=$(($(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)))
+sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * $(echo $thread))))
+if [[ $sortmem -gt 768000 ]]; then
+	sortmem=$(echo "-@ $thread -m ${sortmem}K")
+else
+        newthread=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * 768000)))
+        sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * $(echo $newthread))))
+        sortmem=$(echo "-@ $newthread -m ${sortmem}K")
+fi
+
+	$samtools view -h -@ $thread _raw.bam | $awk -F"\t" 'BEGIN{OFS="\t";while(getline<"uniq.ligateUmi"){a[$1]=$2}}{if(/^@/){print}else{sub(":umi.*",":umi",$1);if(a[$1]!=""){$1=sprintf("%s:%s",$1,a[$1]);print}}}' | $samtools sort $sortmem -o $SampleId.consolidated.bam -	
 rm _raw.bam
 #grep -P '\tSA:Z:' consolidated.sam > _sa.sam
 
