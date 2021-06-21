@@ -4,10 +4,11 @@
 SampleId=$( pwd | sed "s:.*/::")
 memG=$(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE) / (1024 * 1024 * 1024)))G
 awk=$(which mawk)
-if [ "$awk" == "" ]; then
+mawkver=$($awk -W version |& head -n 1|cut -d ' ' -f2)
+if [[ "$mawkver" != "1.3.4" || "$awk" == "" ]]; then
   awk=$(which gawk)
   if [ "$awk" == "" ]; then
-    echo "Neither mawk nor gawk is installed in the system!"
+    echo "Neither mawk 1.3.4 nor gawk is installed in the system!"
     exit
   fi
 fi
