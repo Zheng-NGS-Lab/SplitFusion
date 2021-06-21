@@ -25,4 +25,5 @@ COPY exec /SplitFusion/exec
 COPY R /SplitFusion/R
 COPY inst /SplitFusion/inst
 COPY bin/samtools /usr/bin/samtools
+COPY bin/mawk /usr/bin/mawk
 WORKDIR /SplitFusion
