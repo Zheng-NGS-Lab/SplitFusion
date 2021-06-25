@@ -89,7 +89,7 @@ fi
 #		join <(sort --parallel=$thread -k1,1b -u -S $memG uniq.ligateUmi) - | sed -e 's/ /:/' | tr ' ' '\t' | cut -f1,3- | $samtools view -@ $thread -T $refGenome -bS - | $samtools sort -@ $thread -m $sortmemG -o $SampleId.consolidated.bam -
 
 # Calculate number of threads and RAM per thread for samtools sort
-# Assume 2GB RAM is used for OS and other programs
+# Assume total memory divided by 8 is used for OS and other programs
 # Roughly, RAM around the size of _raw.bam is used for the awk step
 # First, calculate number of KB RAM per thread after subtracting the
 # above two numbers.
@@ -97,13 +97,31 @@ fi
 # then use the calculated value and also set thread to original value
 # Otherwise, reduce number of threads to the point that RAM per
 # thread is larger than 768MB
-totalmem=$(($(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)))
-sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * $(echo $thread))))
+# Note that all units are in KB
+if [ -f /.dockerenv ]; then
+    # inside a docker
+    # use /sys/fs/cgroup/memory/memory.limit_in_bytes as the memory limit
+    # if it contains a valid value
+    # otherwise, we will use the /proc/meminfo MemTotal value
+    totalmem=`cat /sys/fs/cgroup/memory/memory.limit_in_bytes`
+    if [[ "$totalmem" == "9223372036854771712" ]]; then
+# Terra Bio platform
+    	totalmem=`cat /proc/meminfo | grep MemTotal | $awk '{print $2}'`
+        osmem=$(($totalmem / 8))
+    else
+	totalmem=$(($totalmem / 1024))
+        osmem=$(($totalmem / 15))
+    fi
+else
+    totalmem=$(($(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)/1024))
+    osmem=$(($totalmem / 15))
+fi
+sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ ($(echo $thread))))
 if [[ $sortmem -gt 768000 ]]; then
 	sortmem=$(echo "-@ $thread -m ${sortmem}K")
 else
-        newthread=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * 768000)))
-        sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1)*1024 - 2147483648)/ (1024 * $(echo $newthread))))
+        newthread=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ (768000)))
+        sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ ($(echo $newthread))))
         sortmem=$(echo "-@ $newthread -m ${sortmem}K")
 fi
 
