@@ -107,7 +107,7 @@ if [ -f /.dockerenv ]; then
     if [[ "$totalmem" == "9223372036854771712" ]]; then
 # Terra Bio platform
     	totalmem=`cat /proc/meminfo | grep MemTotal | $awk '{print $2}'`
-        osmem=$(($totalmem / 8))
+        osmem=$(($totalmem / 10))
     else
 	totalmem=$(($totalmem / 1024))
         osmem=$(($totalmem / 15))
@@ -116,12 +116,12 @@ else
     totalmem=$(($(getconf _PHYS_PAGES)*$(getconf PAGE_SIZE)/1024))
     osmem=$(($totalmem / 15))
 fi
-sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ ($(echo $thread))))
+sortmem=$((($totalmem - 3*$(du -k uniq.ligateUmi | cut -f1) - $osmem)/ ($(echo $thread))))
 if [[ $sortmem -gt 768000 ]]; then
 	sortmem=$(echo "-@ $thread -m ${sortmem}K")
 else
-        newthread=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ (768000)))
-        sortmem=$((($totalmem - $(du -k _raw.bam | cut -f1) - $osmem)/ ($(echo $newthread))))
+        newthread=$((($totalmem - 3*$(du -k uniq.ligateUmi | cut -f1) - $osmem)/ (768000)))
+        sortmem=$((($totalmem - 3*$(du -k uniq.ligateUmi | cut -f1) - $osmem)/ ($(echo $newthread))))
         sortmem=$(echo "-@ $newthread -m ${sortmem}K")
 fi
 
