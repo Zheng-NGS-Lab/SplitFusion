@@ -78,7 +78,7 @@ if (n.lr3 >0){
 	    known.ge.file = paste0(panel_dir, '/known.gene-exon.txt'); if (file.exists(known.ge.file)){known.ge = readLines(known.ge.file)}
 	    known.partner.file = paste0(panel_dir, '/known.partners.txt'); if (file.exists(known.partner.file)){known.partner = readLines(known.partner.file)}
 	    known.3UTR.truncation.file = paste0(panel_dir, '/known.3UTR.truncation.txt'); if (file.exists(known.3UTR.truncation.file)){known.3UTR = readLines(known.3UTR.truncation.file)} 
-	    known.k.file = paste0(panel_dir, '/known.kinase.txt'); if (file.exists(known.k.file)){known.k = readLines(known.k.file)}
+	    known.k.file = paste0(panel_dir, '/known.priority'); if (file.exists(known.k.file)){known.k = readLines(known.k.file)}
 	    ##==== Targeted remove unwanted fusions (e.g. involving homologous genes or recurrent falsed positives)
 		filter.gg=NA; filter.ge=NA; 
 	    filter.gg.file = paste0(panel_dir, '/filter.gene-gene.txt'); if (file.exists(filter.gg.file)){filter.gg0 = read.table(filter.gg.file, header=F, stringsAsFactors=F);
