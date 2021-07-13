@@ -73,12 +73,12 @@ if (n.lr3 >0){
 	##=== Optional: Backend database supported target output or filtering
 	##===========================================================
 	    ##==== Targeted output known significant fusions or splicing isoforms (e.g. MET ex14 skipping)
-		known.gg=NA; known.ge=NA; known.partner=NA; known.3UTR=NA;
+		known.gg=NA; known.ge=NA; known.partner=NA; known.3UTR=NA; known.k=NA;
 	    known.gg.file = paste0(panel_dir, '/known.gene-gene.txt'); if (file.exists(known.gg.file)){known.gg = readLines(known.gg.file)}
 	    known.ge.file = paste0(panel_dir, '/known.gene-exon.txt'); if (file.exists(known.ge.file)){known.ge = readLines(known.ge.file)}
 	    known.partner.file = paste0(panel_dir, '/known.partners.txt'); if (file.exists(known.partner.file)){known.partner = readLines(known.partner.file)}
 	    known.3UTR.truncation.file = paste0(panel_dir, '/known.3UTR.truncation.txt'); if (file.exists(known.3UTR.truncation.file)){known.3UTR = readLines(known.3UTR.truncation.file)} 
-
+	    known.k.file = paste0(panel_dir, '/known.kinase.txt'); if (file.exists(known.k.file)){known.k = readLines(known.k.file)}
 	    ##==== Targeted remove unwanted fusions (e.g. involving homologous genes or recurrent falsed positives)
 		filter.gg=NA; filter.ge=NA; 
 	    filter.gg.file = paste0(panel_dir, '/filter.gene-gene.txt'); if (file.exists(filter.gg.file)){filter.gg0 = read.table(filter.gg.file, header=F, stringsAsFactors=F);
@@ -89,7 +89,7 @@ if (n.lr3 >0){
 	    lr3$known[(lr3$gene_T == lr3$gene_L & lr3$gene_R %in% known.partner & lr3$intragene==0)] = 1
 	    lr3$known[(lr3$gene_T == lr3$gene_R & lr3$gene_L %in% known.partner & lr3$intragene==0)] = 1
 	    lr3$known[(lr3$ge1ge2 %in% known.ge)] = 1
-	    lr3$known[(lr3$ge1 %in% known.3UTR & lr3$intragene==0)] = 1
+	    lr3$known[(lr3$ge1 %in% known.3UTR & lr3$homolog==0 & lr3$intragene==0)] = 1
 	    lr32 = subset(lr3, (known==1 | (num_partner_ends >= as.numeric(FusionMinStartSite) & intragene==0)) & !(gg %in% filter.gg | ge1 %in% filter.ge | ge2 %in% filter.ge))
 		    # nrow(lr3); nrow(lr32)
 		    # output for furture research
@@ -110,19 +110,18 @@ if (n.lr3 >0){
 	if (nrow(lr32)>0){
 		lr32$read.through = 0
 		lr32$read.through[lr32$gene_L != lr32$gene_R 
-					& lr32$chr_L == lr32$chr_R 
+					& lr32$chr_L == lr32$chr_R
+					& lr32$strand_L == lr32$strand_R
 					& abs(lr32$pos_L - lr32$pos_R)<100000
 					]=TRUE
 
-		lr32$gene_Lchr = gsub('[0-9]', '', lr32$gene_L)
-		lr32$gene_Rchr = gsub('[0-9]', '', lr32$gene_R)
 		homolog.match = function(row){
 				h1 = pmatch(substr(row[1],1,3), row[2])
 				h2 = pmatch(substr(row[2],1,3), row[1])
 				h3 = (h1 || h2)
               			return(h3)
 			}
-		lr32$homolog = apply(lr32[,c('gene_Lchr', 'gene_Rchr')], 1, homolog.match)
+		lr32$homolog = apply(lr32[,c('gene_L', 'gene_R')], 1, homolog.match)
 		lr32$homolog[is.na(lr32$homolog)] = 0
 		lr32$homolog[lr32$known==1] = 0
 
@@ -227,7 +226,7 @@ if (n.lr3 >0){
 				
 			ex = subset(fusion.table, (known | (g5g3 %in% known.gg & (exon.junction != '0') | frame =='gDNA') ## for future compatibility with gDNA reads
 							 | (exon.junction == 'Both' 
-							    & (known ==1 | (frame =='in-frame' & num_partner_ends >= minPartnerEnds_BothExonJunction 
+							    & (known ==1 | ((frame == 'in-frame' | (frame == 'N.A.' & grepl("exon[1-9]", GeneExon5_GeneExon3) & grepl("UTR", GeneExon5_GeneExon3))) & num_partner_ends >= minPartnerEnds_BothExonJunction 
 										& (num_partner_ends >= num_unique_reads | num_partner_ends >= minPartnerEnds_OneExonJunction))))
 							 | (exon.junction == 'One' 
 							    & frame != 'out-frame'
@@ -241,16 +240,29 @@ if (n.lr3 >0){
 			
 			
 	##=======================================
-	## export max 10 example fusion reads
+	## export fusion reads involving known kinase genes
+	## If the number of such fusions are fewer than 
+        ## number of threads, extract the top fusions
+	## from the fusions not involing kinase
 	##=======================================
 			ex1 = read.table(paste(sampleID, '.brief.summary', sep=''), sep='\t', stringsAsFactors=F, header=T)
 			ex2 = ex1[!duplicated(ex1$"GeneExon5_GeneExon3"),]
 			# ex2 = subset(ex2, frame != 'gDNA')
-			(nex = min(10, nrow(ex2)))
+			# fusions involving known kinase 
+			ex3 = ex2[ex2$gene_5 %in% known.k | ex2$gene_3 %in% known.k,]
+			# fusions not involing known kinase
+			ex4 = ex2[!(ex2$gene_5 %in% known.k | ex2$gene_3 %in% known.k),]
+			# minimum fusions to export is 10
+			nex = 10
+			# at the minimum, we will display all kinase fusions
+			if (dim(ex3)[1] > nex) {
+				nex = dim(ex3)[1]
+			}
+			ex5 = rbind(ex3,ex4)
 			if (nex >0){
 				## show max 25 example reads 
 				cores = min(detectCores(),as.numeric(thread))
-				mclapply(1:nex,extractBam,ex2=ex2,lr5=lr5,mc.cores=cores)
+				mclapply(1:nex,extractBam,ex2=ex5,lr5=lr5,mc.cores=cores)
 		        }
 		}
 	}
