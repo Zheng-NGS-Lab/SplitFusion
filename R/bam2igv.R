@@ -1,5 +1,5 @@
   
-  bam2igv <- function(bamfile,outname = bamfile, genomeVer="hg38", win.size=100,chr=NULL,breakpoint=NULL,wait.time=5){
+  bam2igv <- function(bamfile,outname = bamfile, genomeVer="hg38", win.size=100,chr=NULL,breakpoint=NULL,wait.time=10){
     
     #### New version ###
   
