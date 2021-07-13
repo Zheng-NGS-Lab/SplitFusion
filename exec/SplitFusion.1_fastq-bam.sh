@@ -28,15 +28,15 @@ fi
 		if [ "$fastq_file2" != "" ]; then
 	#==== if no umi, add umi:A for compatability
 			if [ $hasUmi -eq 0 ]; then
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
+				$bwa mem $bwaOpts -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
 			else
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
+				$bwa mem $bwaOpts -q -K 10000000 -t $thread $refGenome $fastq_file1 $fastq_file2 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
 			fi
 		else	
 			if [ $hasUmi -eq 0 ]; then
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
+				$bwa mem $bwaOpts -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $awk '/^@/{print}!/^@/{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' | $samtools view -@ $thread -bS - > _raw.bam
 			else
-				$bwa mem -T 18 -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
+				$bwa mem $bwaOpts -q -K 10000000 -t $thread $refGenome $fastq_file1 2> bwa.log | $samtools view -@ $thread -bS - > _raw.bam
 
 			fi
 		fi

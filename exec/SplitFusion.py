@@ -4,6 +4,7 @@ import sys
 import re
 import os
 import argparse
+import gzip
 from future.utils import viewitems
 
 def parseArgs():
@@ -32,6 +33,8 @@ def parseArgs():
     parser.add_argument('--bwa', type=str
                         , default='bwa'
                         , help="The bwa executable file with full path [Optional].")
+    parser.add_argument('--bwaOpts', type=str
+                        , help="Options for the bwa prgram [Optional]. Default: -T 18 -k 19 (or -T 16 -k 16 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--R', type=str
                         , default='R'
                         , help="The R executable file with full path [Optional].")
@@ -63,11 +66,9 @@ def parseArgs():
                         , default=30
                         , help="minimum mapping quality of the leftmost of Read1 (Ligation end). Default=30")
     parser.add_argument('--minMapLength', type=int
-                        , default=18
-                        , help="minimum read mapping length for all split alignments (both Ligation and Anchored ends). Default=18")
+                        , help="minimum read mapping length for all split alignments (both Ligation and Anchored ends). Default=18 (or 16 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--minMapLength2', type=int
-                        , default=25
-                        , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=25")
+                        , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=25 (or 17 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--maxQueryGap', type=int
                         , default=1
                         , help="maximum gap length between split alignments on a query read. Default=1")
@@ -75,8 +76,7 @@ def parseArgs():
                         , default=6
                         , help="maximum overlapping bases of two split alignments on a query read. Default=6")
     parser.add_argument('--minExclusive', type=int
-                        , default=18
-                        , help="minimum exclusive length between two split alignments. Default=18")
+                        , help="minimum exclusive length between two split alignments. Default=18 (or 16 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--FusionMinStartSite', type=int
                         , default=1
                         , help="minimum number of fusion partner ends (ligation end) to call CANDIDATE structure variation/fusion. Should be less or equal minPartnerEnds_BothExonJunction. Default=1")
@@ -88,8 +88,60 @@ def parseArgs():
                         , help="minimum number of fusion partner ends (ligation end), when only one breakpoint is at exon boundary/junction, in the final call of structure variation/fusion. Default=3")
 
     args = vars(parser.parse_args())
-
-
+    if args['fastq_file1'] is None:
+        # fastq file is not supplied, give a warning
+        sys.stdout.write("Only bam input is detected. For parameters not being set, default values for long reads will be used.\n")
+        if args['bwaOpts'] is None:
+            args['bwaOpts'] = '-T 18 -k 19'
+        if args['minExclusive'] is None:
+            args['minExclusive'] = 18
+        if args['minMapLength'] is None:
+            args['minMapLength'] = 18
+        if args['minMapLength2'] is None:
+            args['minMapLength2'] = 25
+    else:
+        # check if the input data is long read 
+        if args['fastq_file1'].endswith(".gz"):
+            f = gzip.open(args['fastq_file1'], "rb")
+        else:
+            f = open(args['fastq_file1'], "r")
+        read_count = 0
+        total_bases = 0
+        while True:
+            read = f.readline()
+            seq = f.readline()
+            plus = f.readline()
+            qual = f.readline()
+            if qual is None:
+                break
+            read_count += 1
+            total_bases += (len(seq)-1)
+            if read_count >= 10000:
+                break
+        f.close()
+        avglen = float(total_bases)/float(read_count)
+        if avglen <= 51.0:
+            sys.stdout.write("Average read length of the first %d reads is %.2f is <=51\n" % (read_count, avglen))
+            sys.stdout.write("For parameters not being set, default values for short reads will be used.\n")
+            if args['bwaOpts'] is None:
+                args['bwaOpts'] = '-T 16 -k 16'
+            if args['minExclusive'] is None:
+                args['minExclusive'] = 16
+            if args['minMapLength'] is None:
+                args['minMapLength'] = 16
+            if args['minMapLength2'] is None:
+                args['minMapLength2'] = 17
+        else:
+            sys.stdout.write("Average read length of the first %d reads is %.2f is >51\n" % (read_count, avglen))
+            sys.stdout.write("For parameters not being set, default values for long reads will be used.\n")
+            if args['bwaOpts'] is None:
+                args['bwaOpts'] = '-T 18 -k 19'
+            if args['minExclusive'] is None:
+                args['minExclusive'] = 18
+            if args['minMapLength'] is None:
+                args['minMapLength'] = 18
+            if args['minMapLength2'] is None:
+                args['minMapLength2'] = 25
     return args
 
 def mkdir(path):
