@@ -151,7 +151,66 @@ if [ -s _sa.bed ]; then
                                 print $0,$3"_"$4
                         }
                 }' _right | tr ' ' '\t' | sed 1d | sort --parallel=$thread -k1,1b -S $memG | join _lefts.s - | \
-	$awk '{if ($11 < $21){
+			$awk -v p=${SFpath} -v w=${genomeVer} 'BEGIN{
+	while (getline<sprintf("%s/inst/data/%s_refGene.mostExon.NM",p,w)) {
+		if ($8~/^[0-9]+$/) {
+		for (i=1;i<=$8;i++) {
+                        split($9,b,",");
+                        split($10,c,",");
+                        a[sprintf("%s_%s",$2,b[i]+1)]=1;
+                        a[sprintf("%s_%s",$2,c[i])]=1;
+                }
+		}
+        }
+}
+{
+        adj = $10-$9+$20-$19+2 - $2;
+        if ($2 == $12 && adj > 0 && ($8~/[0-9]+M[0-9]+[HS]/ || $8~/[0-9]+[HS][0-9]+M/) && ($18~/[0-9]+M[0-9]+[HS]/ || $18~/[0-9]+[HS][0-9]+M/)) {
+                score=a[$11]+a[$21]; adji = -1; nadj = adj;
+                for (i=0;i<=adj;++i) {
+                        if ($7=="+") {
+                                b1=sprintf("%s_%s",$3,$5-adj+i);
+                        } else {
+                                b1=sprintf("%s_%s",$3,$5+adj-i);
+                        }
+                        if ($17=="+") {
+                                b2=sprintf("%s_%s",$13,$14+i);
+                        } else {
+                                b2=sprintf("%s_%s",$13,$14-i);
+                        }
+                        nscore = a[b1]+a[b2];
+                        if (nscore > score || (nscore == score && nadj > 0)) {
+                                score = a[b1]+a[b2];
+                                adji = i;
+				nadj = 0;
+                        }
+                }
+                if (adji >= 0) {
+                        if ($8~/H/){sh8="H"}else{sh8="S"}
+                        if ($18~/H/){sh18="H"}else{sh18="S"}
+                        if ($7=="+") {
+                                $5-=(adj-adji);
+                                $10-=(adj-adji);
+                                $8=sprintf("%dM%d%s",$10,$2-$10,sh8);
+                        } else {
+                                $5+=(adj-adji);
+                                $10-=(adj-adji);
+                                $8=sprintf("%d%s%dM",$2-$10,sh8,$10);
+                        }
+                        $11=sprintf("%s_%s",$3,$5);
+                        if ($17=="+") {
+                                $14+=adji;
+                                $19+=adji;
+                                $18=sprintf("%d%s%dM",$19-1,sh18,$12-$19+1);
+                        } else {
+                                $14-=adji;
+                                $19+=adji;
+                                $18=sprintf("%dM%d%s",$12-$19+1,$19-1,sh18);
+                        }
+                        $21=sprintf("%s_%s",$13,$14);
+		}
+	}
+		if ($11 < $21){
 			pp=$11"__"$21
 		} else {pp=$21"__"$11
 		}; 

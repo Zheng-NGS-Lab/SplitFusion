@@ -154,7 +154,7 @@ if (n.lr3 >0){
 				refGene2 = subset(refGene, name2 %in% bk.genes)[,c('name2', 'exonStarts', 'exonEnds')]
 
 					toStarts = function(row){
-						dist = as.numeric(unlist(strsplit(as.character(row[1]),','))) - as.numeric(row[2])
+						dist = as.numeric(unlist(strsplit(as.character(row[1]),',')))+1 - as.numeric(row[2])
 						if (any(dist %in% 0:2)) {junction=1} else {junction=0}
 						return(junction)
 						}

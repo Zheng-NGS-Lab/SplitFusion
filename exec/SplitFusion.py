@@ -124,13 +124,13 @@ def parseArgs():
             sys.stdout.write("Average read length of the first %d reads is %.2f is <=51\n" % (read_count, avglen))
             sys.stdout.write("For parameters not being set, default values for short reads will be used.\n")
             if args['bwaOpts'] is None:
-                args['bwaOpts'] = '-T 16 -k 16'
+                args['bwaOpts'] = '-T 15 -k 16'
             if args['minExclusive'] is None:
-                args['minExclusive'] = 16
+                args['minExclusive'] = 15
             if args['minMapLength'] is None:
-                args['minMapLength'] = 16
+                args['minMapLength'] = 15
             if args['minMapLength2'] is None:
-                args['minMapLength2'] = 17
+                args['minMapLength2'] = 15
         else:
             sys.stdout.write("Average read length of the first %d reads is %.2f is >51\n" % (read_count, avglen))
             sys.stdout.write("For parameters not being set, default values for long reads will be used.\n")
