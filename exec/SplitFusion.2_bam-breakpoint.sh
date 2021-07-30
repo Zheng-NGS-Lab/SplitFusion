@@ -112,13 +112,23 @@ if [ -s _sa.bed ]; then
 	}'
 
 	# remove ligation.site not near Read 1 _Left
-	grep "/1" _left | sed "s/:umi:C/\t/" | sed -e "s/P/\t/" -e "s/-/\t/" | $awk '{OFS="\t";
-			diff = $3 - 100000000 - $7;
-			if (diff <0) {diff = -diff};
-			if ($2 != $6 || diff > 750000){
-				print $1":umi:C"$2"P"$3"-"$4 > "_diff_ligate_left"
-			}
-		}'
+	$awk '$1~/\/1$/{OFS="\t";
+		n=split($1,a,"-");
+		$1=a[n-1]"\t"a[n];
+		for(i=n-2;i>0;--i){$1=a[i]"-"$1}
+		n=split($1,a,"P");
+		$1=a[n-1]"\t"a[n];
+		for(i=n-2;i>0;--i){$1=a[i]"P"$1}
+		n=split($1,a,":umi:C");
+		$1=a[n-1]"\t"a[n];
+		for(i=n-2;i>0;--i){$1=a[i]":umi:C"$1}
+		n=split($1,a,"\t");
+		diff = a[3] - 100000000 - $4;
+		if (diff <0) {diff = -diff};
+		if (a[2] != $3 || diff > 750000){
+			print a[1]":umi:C"a[2]"P"a[3]"-"a[4] > "_diff_ligate_left"
+		}
+	}' _left
 	
 		if [ -s _diff_ligate_left ]; then
 			join -v 1 _left _diff_ligate_left > _left2
