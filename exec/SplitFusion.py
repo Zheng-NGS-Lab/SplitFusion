@@ -34,7 +34,7 @@ def parseArgs():
                         , default='bwa'
                         , help="The bwa executable file with full path [Optional].")
     parser.add_argument('--bwaOpts', type=str
-                        , help="Options for the bwa prgram [Optional]. Default: -T 18 -k 19 (or -T 16 -k 16 if average read length of the first 10,000 reads <=51)")
+                        , help="Options for the bwa prgram [Optional]. Default: -T 18 -k 19 (or -T 15 -k 16 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--R', type=str
                         , default='R'
                         , help="The R executable file with full path [Optional].")
@@ -66,9 +66,9 @@ def parseArgs():
                         , default=30
                         , help="minimum mapping quality of the leftmost of Read1 (Ligation end). Default=30")
     parser.add_argument('--minMapLength', type=int
-                        , help="minimum read mapping length for all split alignments (both Ligation and Anchored ends). Default=18 (or 16 if average read length of the first 10,000 reads <=51)")
+                        , help="minimum read mapping length for all split alignments (both Ligation and Anchored ends). Default=18 (or 15 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--minMapLength2', type=int
-                        , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=25 (or 17 if average read length of the first 10,000 reads <=51)")
+                        , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=18 (or 15 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--maxQueryGap', type=int
                         , default=1
                         , help="maximum gap length between split alignments on a query read. Default=1")
@@ -98,7 +98,7 @@ def parseArgs():
         if args['minMapLength'] is None:
             args['minMapLength'] = 18
         if args['minMapLength2'] is None:
-            args['minMapLength2'] = 25
+            args['minMapLength2'] = 18
     else:
         # check if the input data is long read 
         if args['fastq_file1'].endswith(".gz"):
@@ -141,7 +141,7 @@ def parseArgs():
             if args['minMapLength'] is None:
                 args['minMapLength'] = 18
             if args['minMapLength2'] is None:
-                args['minMapLength2'] = 25
+                args['minMapLength2'] = 18
     return args
 
 def mkdir(path):
