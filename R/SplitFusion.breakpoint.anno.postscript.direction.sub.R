@@ -108,11 +108,13 @@ if (n.lr3 >0){
 	## To calculate:
 	#	- exon boundary/junction
 	if (nrow(lr32)>0){
+# read.through limit reduced to 84000 to allow RPS6KB1--VMP1 in LUAD-62-A46O
+# further reduce to 76000 to allow ERBB2--PPP1R1B in BLCA-DK-A1A3
 		lr32$read.through = 0
 		lr32$read.through[lr32$gene_L != lr32$gene_R 
 					& lr32$chr_L == lr32$chr_R
 					& lr32$strand_L == lr32$strand_R
-					& abs(lr32$pos_L - lr32$pos_R)<100000
+					& abs(lr32$pos_L - lr32$pos_R)<76000
 					]=TRUE
 
 		homolog.match = function(row){
