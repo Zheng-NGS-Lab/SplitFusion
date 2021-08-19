@@ -114,7 +114,9 @@ if (n.lr3 >0){
 		lr32$read.through[lr32$gene_L != lr32$gene_R 
 					& lr32$chr_L == lr32$chr_R
 					& lr32$strand_L == lr32$strand_R
-					& abs(lr32$pos_L - lr32$pos_R)<76000
+					& lr32$geneStrand_L == lr32$geneStrand_R
+                                        & (lr32$geneStrand_L == '+' & lr32$pos_R - lr32$pos_L >= 0 & lr32$pos_R - lr32$pos_L < 100000 |
+                                           lr32$geneStrand_L == '-' & lr32$pos_L - lr32$pos_R >= 0 & lr32$pos_L - lr32$pos_R < 100000)
 					]=TRUE
 
 		homolog.match = function(row){
