@@ -53,13 +53,29 @@ BEGIN {
 			} else if (nc[$1] < bs[$3]) {
 				split($3,c," ");
 				if (nc[$1]==0) {
-					b[$3]=sprintf("%s_%s\t%s\t-\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
+					b[$3]=sprintf("%s_%s\t%s\tNA\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
 				} else {
 					split($2,d,"(");
-					if (d[1] in a) {
-						b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\t%s\t%s\tNA",c[1],c[2],d[1],$1,a[d[1]],$1);
+				        gene = d[1];
+				        dir[$3]="NA";
+			        	if ($1~/UTR/ || $1~/splicing/) {
+						n=split($2,e,"),");
+						for(i=1;i<=n;i++) {
+							split(e[i],f,"(");
+							if (f[1] in a) {
+								if (f[2]~/A>A/) {
+									dir[$3]="+";
+								} else{
+									dir[$3]="-";
+								}
+								gene = f[1]
+							}
+						}
+					}
+					if (gene in a) {
+						b[$3]=sprintf("%s_%s\t%s\t%s\t%s\tNA\t%s\t%s\tNA",c[1],c[2],gene,dir[$3],$1,a[d[1]],$1);
 					} else {
-						b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],d[1],$1,$1);
+						b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],gene,$1,$1);
 					}
 				}
 				bs[$3]=nc[$1];
@@ -67,13 +83,29 @@ BEGIN {
 		} else {
 			split($3,c," ");
 			if (nc[$1]==0) {
-				b[$3]=sprintf("%s_%s\t%s\t-\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
+				b[$3]=sprintf("%s_%s\t%s\tNA\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
 			} else {
 				split($2,d,"(");
-				if (d[1] in a) {
-					b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\t%s\t%s\tNA",c[1],c[2],d[1],$1,a[d[1]],$1);
+				gene = d[1];
+				dir[$3]="NA";
+				if ($1~/UTR/ || $1~/splicing/) {
+					n=split($2,e,"),");
+					for(i=1;i<=n;i++) {
+						split(e[i],f,"(");
+						if (f[1] in a) {
+							if (f[2]~/A>A/) {
+								dir[$3]="+";
+							} else{
+								dir[$3]="-";
+							}
+							gene = f[1]
+						}
+					}
+				}
+				if (gene in a) {
+					b[$3]=sprintf("%s_%s\t%s\t%s\t%s\tNA\t%s\t%s\tNA",c[1],c[2],gene,dir[$3],$1,a[d[1]],$1);
 				} else {
-					b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],d[1],$1,$1);
+					b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],gene,$1,$1);
 				}
 			}
 			bs[$3]=nc[$1];
