@@ -23,9 +23,13 @@ BEGIN {
 				pos[$4]=substr(e[4],4,length(e[4])-4);
 			}
 		}
-		if (!($4 in b) || a[g[$4]]==nm[$4]) {
-			b[$4]=sprintf("%s_%s\t%s\t%s\texonic\t%s\t%s\t%s\t%d",c[1],c[2],g[$4],dir[$4],$2,nm[$4],ex[$4],pos[$4]);
-			bs[$4]=0;
+		if (!($4 in b)) {
+		        if (a[g[$4]]==nm[$4]) {
+				b[$4]=sprintf("%s_%s\t%s\t%s\texonic\t%s\t%s\t%s\t%d",c[1],c[2],g[$4],dir[$4],$2,nm[$4],ex[$4],pos[$4]);
+				bs[$4]=0;
+			} else {
+				bs[$4]=11;
+			}
 		}
 	}
 # 0. exonic
@@ -69,12 +73,16 @@ BEGIN {
 									dir[$3]="-";
 								}
 								gene = f[1]
+								if (index($2,sprintf("%s:",a[gene])) == 0) {
+									gene="";
+									break;
+								}
 							}
 						}
 					}
 					if (gene in a) {
 						b[$3]=sprintf("%s_%s\t%s\t%s\t%s\tNA\t%s\t%s\tNA",c[1],c[2],gene,dir[$3],$1,a[d[1]],$1);
-					} else {
+					} else if (gene != "") {
 						b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],gene,$1,$1);
 					}
 				}
@@ -83,7 +91,9 @@ BEGIN {
 		} else {
 			split($3,c," ");
 			if (nc[$1]==0) {
-				b[$3]=sprintf("%s_%s\t%s\tNA\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
+			        if (bs[$3]!=11) {
+					b[$3]=sprintf("%s_%s\t%s\tNA\texonic\tunknown\tUNKNOWN\tUNKNOWN\tUNKNOWN",c[1],c[2],$2);
+				}
 			} else {
 				split($2,d,"(");
 				gene = d[1];
@@ -99,12 +109,16 @@ BEGIN {
 								dir[$3]="-";
 							}
 							gene = f[1]
+							if (index($2,sprintf("%s:",a[gene])) == 0) {
+								gene="";
+								break;
+							}
 						}
 					}
 				}
 				if (gene in a) {
 					b[$3]=sprintf("%s_%s\t%s\t%s\t%s\tNA\t%s\t%s\tNA",c[1],c[2],gene,dir[$3],$1,a[d[1]],$1);
-				} else {
+				} else if (gene != "") {
 					b[$3]=sprintf("%s_%s\t%s\tNA\t%s\tNA\tNA\t%s\tNA",c[1],c[2],gene,$1,$1);
 				}
 			}
