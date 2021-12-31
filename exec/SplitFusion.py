@@ -70,8 +70,8 @@ def parseArgs():
     parser.add_argument('--minMapLength2', type=int
                         , help="minimum mapping length of the leftmost of Read1 (Ligation end). Default=18 (or 15 if average read length of the first 10,000 reads <=51)")
     parser.add_argument('--maxQueryGap', type=int
-                        , default=1
-                        , help="maximum gap length between split alignments on a query read. Default=1")
+                        , default=3
+                        , help="maximum gap length between split alignments on a query read. Default=3")
     parser.add_argument('--maxOverlap', type=int
                         , default=6
                         , help="maximum overlapping bases of two split alignments on a query read. Default=6")
