@@ -1,0 +1,16 @@
+# A bed to handle multiple mapping caused by pseudogenes
+# The idea is to prioritize the mapping within the range of the intervals
+# specified in this file. For all mapping with mapping quality 0 and
+# containing a XA:Z tag, the mapping falls on the intervals specified
+# below will be used to replace the primary mapping. After that, XA:Z tag
+# will be removed and the SAM flag will be updated accordingly.
+# When you have more than one entry in this file, the priority between 
+# multiple intervals is determined by order of intervals, ie the intervals
+# nearer to the top of this file will have higher priority than the lower
+# ones. 
+# This shouldn't be a problem in general as different families of pseudogenes
+# are supposedly different enough that they should not be on the same
+# XA:Z tag.
+# ******** Please make sure the 4th field is unique for each line!!! *******
+chr4	190173773	190175845	DUX4
+chr12	6534516	6538371	GAPDH
