@@ -1,5 +1,14 @@
-#### Pipeline for running SplitFusino for kinase gene fusion detection
+#### Pipeline for running SplitFusion for kinase gene fusion detection
 ### https://github.com/Zheng-NGS-Lab/SplitFusion
+### This is a sample WDL to run SplitFusion on Terra Bio
+### Please config the parameters either by editing this file or
+### set them on the Terra Bio interface
+### The docker image used to run the Terra Bio LUAD TCGA analysis
+### can be pulled from the following URL 
+### docker.io/ymcki/splitfusion@sha256:4f9841f176736acb370763872cfc75b4f323e79126202cea942cf61ee8c4b7e5
+### For the latest image that is identical to the SplitFusion-0.5 release
+### Please use this URL instead:
+### docker.io/ymcki/splitfusion@sha256:fe81344a1fe8216f62af37cbb7890acd1ef4bbfa5da08f7a41b93007a8c86533
 
 task samtofastq {
 
@@ -85,7 +94,7 @@ task bwa {
 
   String? other_args="-T 18 -M -q -K 10000000"
 
-  String? docker="docker.io/ymcki/splitfusion@sha256:de93d2fd85816a2a402c5384a77cc1abb45abcfd05d87f1261f32f5bfd92012b"
+  String? docker="docker.io/ymcki/splitfusion@sha256:4f9841f176736acb370763872cfc75b4f323e79126202cea942cf61ee8c4b7e5"
   Int? disk_buffer_gb = "10"
   Int? disk_scaler = "2"
   Int? disk_space = ceil( (size(fastq1, "GB") + size(fastq2, "GB") + size(fastq_tar_gz, "GB")*10 + size(reference_fa, "GB") + size(reference_index_tar_gz, "GB")) * disk_scaler ) + disk_buffer_gb
@@ -152,7 +161,7 @@ task splitfusion {
 
     Boolean? save_extended_output=false
 
-    String? docker="docker.io/ymcki/splitfusion@sha256:de93d2fd85816a2a402c5384a77cc1abb45abcfd05d87f1261f32f5bfd92012b"
+    String? docker="docker.io/ymcki/splitfusion@sha256:4f9841f176736acb370763872cfc75b4f323e79126202cea942cf61ee8c4b7e5"
     Int? disk_buffer_gb="25"
     Float? disk_scaler="15" #bam is converted to sam and multiple copies are made in SplitFusion
     Int? disk_space=ceil( (size(fastq1,"GB") + size(fastq2,"GB") + size(bam,"GB") + size(fastq_tar_gz,"GB")) * disk_scaler + size(reference_fa, "GB") + size(reference_index_tar_gz, "GB") + size(annovar_db_tar_gz, "GB")*5) + disk_buffer_gb
@@ -260,7 +269,7 @@ workflow splitfusion_workflow {
     File reference_index_tar_gz
     File annovar_db_tar_gz
     File? panel_tar_gz
-    String? docker="docker.io/ymcki/splitfusion@sha256:de93d2fd85816a2a402c5384a77cc1abb45abcfd05d87f1261f32f5bfd92012b"
+    String? docker="docker.io/ymcki/splitfusion@sha256:4f9841f176736acb370763872cfc75b4f323e79126202cea942cf61ee8c4b7e5"
     String? samtofastq_docker
     Int? num_preempt
 
