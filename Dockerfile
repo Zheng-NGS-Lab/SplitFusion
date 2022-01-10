@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.9.6-slim-bullseye
 
 LABEL org.label-schema.license="GPL-2.0" \
       org.label-schema.vcs-url="https://github.com/rocker-org/rocker-versioned" \
@@ -25,5 +25,4 @@ COPY exec /SplitFusion/exec
 COPY R /SplitFusion/R
 COPY inst /SplitFusion/inst
 COPY bin/samtools /usr/bin/samtools
-COPY bin/mawk /usr/bin/mawk
 WORKDIR /SplitFusion
