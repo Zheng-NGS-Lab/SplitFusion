@@ -51,8 +51,8 @@ def parseArgs():
                         , default='1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post'
 			, help="Specify steps to run. Default='1_fastq-bam,2_bam-breakpoint,3_breakpoint-filter,4_breakpoint-anno,5_breakpoint-anno-post'")
     parser.add_argument('--AnnotationMethod', required=False
-                        , default = 'annovar'
-                        , help="the name of annotation tools. Default = 'annovar'")
+                        , default = 'snpEff'
+                        , help="the name of annotation tools. Default = 'snpEff'")
     parser.add_argument('--thread', type=int
                         , default=1
                         , help="number of threads for parallel computing. Default=1")

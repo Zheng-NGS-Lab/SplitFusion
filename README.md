@@ -62,9 +62,13 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 
 - [perl](https://www.perl.org/get.html)
 
+
+	Currently, SplitFusion by default uses snpEff but it also supports ANNOVA. snpEff is a free annotation software. When you run it for the first time, it will automatically download the genome database (either hg19 or hg38) from the internet. To run with snpEff, you only need to specify your snpEff directory via --annovar /home/user1/tools/snpEff
+
+- [snpEff](https://pcingola.github.io/SnpEff/download/)
 - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)	
 
-	Currently, SplitFusion uses ANNOVAR, which requires a free registration. Note that the annovar sub-directory structure should be maintained, e.g. if you install annovar under /home/user1/tools:
+        If you use ANNOVAR, you need a free registration. Then run SplitFusion with the flag --AnnotationMethod annovar. Note that the annovar sub-directory structure should be maintained, e.g. if you install annovar under /home/user1/tools:
 	
 		/home/user1/tools/annovar/annotate_variation.pl
 		
@@ -97,7 +101,7 @@ When running SplitFusion, you can specify paths to the tools and genome files yo
 ```
 	python /home/user1/tools/SplitFusion/exec/SplitFusion.py -h
 
-usage: SplitFusion.py [-h] --refGenome REFGENOME --annovar ANNOVAR --samtools
+usage: SplitFusion.py [-h] --refGenome REFGENOME --annovar SNPEFF_PATH --samtools
                       SAMTOOLS --bedtools BEDTOOLS --bwa BWA --R R --perl PERL
                       --output OUTPUT --sample_id SAMPLE_ID
                       [--bam_file BMS_FILE] [--fastq_file1 FASTQ_FILE1] [--fastq_file2 FASTQ_FILE2]
@@ -120,7 +124,7 @@ optional arguments:
   --refGenome REFGENOME
                         The reference genome file, with a full path
                         [required].
-  --annovar ANNOVAR     The annovar executable file [required].
+  --annovar SNPEFF	The snpEff path [required].
   --samtools SAMTOOLS   The samtools executable file with full path [Optional].
   --bedtools BEDTOOLS   The bedtools executable file with full path [Optional].
   --bwa BWA             The bwa executable file with full path [Optional].
@@ -172,7 +176,7 @@ optional arguments:
 ##=========================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
-        --annovar /home/user1/tools/annovar \
+        --annovar /home/user1/tools/snpEff \
         --samtools /home/user1/tools/samtools/bin/samtools \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \
@@ -190,7 +194,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 ##=========================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
-        --annovar /home/user1/tools/annovar \
+        --annovar /home/user1/tools/snpEff \
         --samtools /home/user1/tools/samtools/bin/samtools \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \
@@ -209,7 +213,7 @@ cp /home/user1/tools/SplitFusion/inst/data/panel/* /home/user1/SplitFusion-test/
 
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
-        --annovar /home/user1/tools/annovar \
+        --annovar /home/user1/tools/snpEff \
         --samtools /home/user1/tools/samtools/bin/samtools \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \
@@ -230,7 +234,7 @@ python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
 ##=======================================================================
 python /home/user1/tools/SplitFusion/exec/SplitFusion.py \
         --refGenome /home/user1/database/Homo_sapiens_assembly19.fasta \
-        --annovar /home/user1/tools/annovar \
+        --annovar /home/user1/tools/snpEff \
         --samtools /home/user1/tools/samtools/bin/samtools \
         --bedtools /home/user1/tools/bedtools2/bin/bedtools \
         --bwa /home/user1/tools/bwa/bwa \

@@ -48,13 +48,11 @@ fi
 	$perl $annovar/annotate_variation.pl -geneanno -buildver $genomeVer -dbtype refGene -outfile __breakpoint.annotated.refGene -exonsort __breakpoint.for.anno $annovar/humandb/ --separate > /dev/null 2>&1
 	cat __breakpoint.for.anno | \
 	$awk -v w=$SFpath -v p=$genomeVer -v q="__breakpoint.annotated" -f $SFpath/exec/annovar.exon.cds.extraction.awk > __breakpoint.annotated.${genomeVer}_multianno.txt.ext0
-
+	rm -rf __breakpoint.annotated.refGene.*
+    elif [ $AnnotationMethod = "snpEff" ]; then
+	cat __breakpoint.for.anno0 | $awk '{OFS="\t";print $1,$2,".",".","A",".",".","."}' > __breakpoint.for.anno
+	java -jar $annovar/snpEff.jar ann -chr chr $genomeVer __breakpoint.for.anno | $awk -v w=$SFpath -v p=$genomeVer -f $SFpath/exec/snpeff.exon.cds.extraction.awk > __breakpoint.annotated.${genomeVer}_multianno.txt.ext0
     fi
-
-
-    #if [ $AnnotationMethod = "snpEff" ]; then
-	# under dev...
-    #fi
 
 sort --parallel=$thread -k1,1b -S $memG __breakpoint.annotated.${genomeVer}_multianno.txt.ext0 > __breakpoint.annotated.extr
 
@@ -73,15 +71,16 @@ sort --parallel=$thread -k1,1b -S $memG __breakpoint.annotated.${genomeVer}_mult
 		$perl $annovar/annotate_variation.pl -geneanno -buildver $genomeVer -dbtype refGene -outfile _mid.anno.refGene -exonsort _mid.for.anno $annovar/humandb/ --separate > /dev/null 2>&1
 		cat _mid.for.anno | \
 		$awk -v w=$SFpath -v p=$genomeVer -v q="_mid.anno" -f $SFpath/exec/annovar.exon.cds.extraction.awk > _mid.anno.${genomeVer}_multianno.txt.ext0
+		rm -rf _mid.annotated.refGene.*
 
-		fi
+	    	elif [ $AnnotationMethod = "snpEff" ]; then
+		    	tr ' ' '\t' < _mid.for.anno0 | sort --parallel=$thread -u | $awk '{OFS="\t";print $1,$2,".",".","A",".",".","."}' > _mid.for.anno
+			java -jar $annovar/snpEff.jar ann -chr chr $genomeVer _mid.for.anno | $awk -v w=$SFpath -v p=$genomeVer -f $SFpath/exec/snpeff.exon.cds.extraction.awk > _mid.annotated.${genomeVer}_multianno.txt.ext0
 
-	    #if [ $AnnotationMethod = "snpEff" ]; then
-		# under dev...
-	    #fi
+	    	fi
 
 		tr ' ' '\t' < _mid.for.anno0 | sed 's:\t:_:' | sort --parallel=$thread -k1,1b > _mid.for.anno1
 		sort --parallel=$thread -k1,1b _mid.anno.${genomeVer}_multianno.txt.ext0 | join _mid.for.anno1 - | cut -d ' ' -f2,5- > anno.mid
-		rm _mid.for.anno0 _mid.for.anno _mid.anno.refGene.* _mid.anno.${genomeVer}_multianno.txt.ext0
+		rm _mid.for.anno0 _mid.for.anno _mid.anno.${genomeVer}_multianno.txt.ext0
 	fi
-rm __orpLeft __orpRight __breakpoint.for.anno __breakpoint.for.anno0 _anno.left __breakpoint.annotated.extr __breakpoint.annotated.refGene.* __breakpoint.annotated.${genomeVer}_multianno.txt.ext0
+rm __orpLeft __orpRight __breakpoint.for.anno __breakpoint.for.anno0 _anno.left __breakpoint.annotated.extr __breakpoint.annotated.${genomeVer}_multianno.txt.ext0
