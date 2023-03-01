@@ -17,7 +17,6 @@ fi
 ##==== 1.2. average the mapping quality of primary and secondary alignment
 ##==== 1.3. print alignment length to _sa.len
 ##==== 1.4. bedtools bamtobed output to _sa.bed
-
 	$samtools view -@ $thread $SampleId.consolidated.bam | $awk -F "\t" 'BEGIN{OFS="\t"}/\tSA:Z/{for(i=1;i<=NF;i++){if($i~/^SA:Z/){n=split($i,a,",");if(n==6){if(a[5]>$5){$5=int(($5+a[5])/2)}print;printf "%s %d\n",$1,length($10) > "_sa.len";break}}}}' | $samtools view -T $refGenome -bS - | $bedtools bamtobed -cigar -i stdin | $awk -F"\t" '{start = $2+1; $2=start; print}' > _sa.bed
 
 if [ -s _sa.bed ]; then
@@ -174,6 +173,12 @@ if [ -s _sa.bed ]; then
         }
 }
 {
+	if (w=="hg19") {
+	  if ($3!~/^chr/){$3=sprintf("chr%s",$3)}
+	  if ($13!~/^chr/){$13=sprintf("chr%s",$13)}
+	  if ($11!~/^chr/){$11=sprintf("chr%s",$11)}
+	  if ($21!~/^chr/){$21=sprintf("chr%s",$21)}
+	}
         adj = $10-$9+$20-$19+2 - $2;
         if ($2 == $12 && adj > 0 && ($8~/[0-9]+M[0-9]+[HS]/ || $8~/[0-9]+[HS][0-9]+M/) && ($18~/[0-9]+M[0-9]+[HS]/ || $18~/[0-9]+[HS][0-9]+M/)) {
                 score=a[$11]+a[$21]; adji = -1; nadj = adj;
@@ -255,10 +260,10 @@ if [ -f split.mid ]; then
 
 		join _breakpoint.noFilter.bkp.corrected _mid.id > breakpoint.candidates.preFilter.w.mid
 		join -v 1 _breakpoint.noFilter.bkp.corrected _mid.id > breakpoint.candidates.preFilter
-		rm _breakpoint.noFilter.bkp.corrected _mid.id _breakpoint.noFilter2 _sa.SMH4sn
+#		rm _breakpoint.noFilter.bkp.corrected _mid.id _breakpoint.noFilter2 _sa.SMH4sn
 	else
 		rm _mid.id _sa.SMH4sn
-        	mv _breakpoint.noFilter2 breakpoint.candidates.preFilter
+#        	mv _breakpoint.noFilter2 breakpoint.candidates.preFilter
 	fi
 else
 	rm _sa.SMH4sn
