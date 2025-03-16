@@ -20,7 +20,7 @@ fi
 if [ $panel != "NA" ]; then
 	sed "s:umi:\tumi:" breakpoint.candidates.preFilter | sort --parallel=$thread -k1,1b -S $memG > _breakpoint.candidates.preFilter.srt
 	$awk '{if ($1 ~ /\/2/ && $9 == 1) print}' breakpoint.candidates.preFilter | $awk '{OFS="\t"; if ($7 == "-"){start=$5; $5=$4; $4=start};print $3,$4,$5,$1,$6,$7}' | sort --parallel=$thread -k1,1n -k2,2n -S $memG | $bedtools intersect -wa -wb -a $panel_dir/${genomeVer}_${panel}.GSP2.bed -b - | $awk '{diff1 = $8 - $2; diff2 = $9 - $3;if ($6 == "-"){if (diff1 >= -1 && diff1 <=1) {if (diff2 >= 3) {print} else {print > "_preFilter.anchored.offTarget.bed"}} else {print > "_preFilter.nonAnchored.bed"}} else {if (diff2 >= -1 && diff2 <=1) {if (diff1 <= -3) {print} else {print > "_preFilter.anchored.offTarget.bed"}} else {print > "_preFilter.nonAnchored.bed"}}}' | cut -f 10 | sed "s:umi.*::" | sort --parallel=$thread -k1,1b -u -S $memG | join - _breakpoint.candidates.preFilter.srt | sed 's: ::' > breakpoint.candidates.preFilter
-	rm _breapoint.candidates.preFilter.srt _preFilter.anchored.offTarget.bed _preFilter.nonAnchored.bed
+	rm _breakpoint.candidates.preFilter.srt _preFilter.anchored.offTarget.bed _preFilter.nonAnchored.bed
 
 
 	##==== reads with middle split
