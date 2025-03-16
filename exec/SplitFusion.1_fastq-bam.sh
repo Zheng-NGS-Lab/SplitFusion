@@ -17,6 +17,16 @@ fi
 	if [ "$bam_file" != "" ]; then
                     hasUmi=$($(samtools) view $bam_file | head -n 1 | cut -f 1 | grep umi: | wc -l)
 		    $samtools view -@ $thread $bam_file > _raw.sam
+              #==== if no umi, add umi:A## for compatability, where ## is the read pair number starting from 1.
+	        hasUmi=$(grep -v ^@ _raw.sam | head -n 1 | cut -f 1 | grep umi: | wc -l)
+                if [ $hasUmi -eq 0 ]; then
+                        grep -v ^@ _raw.sam | awk '{OFS="\t";if(preId!=$1){n++}; preId=$1; $1=$1":umi:A"n; print $0}' > _raw.sam2
+                        mv _raw.sam2 _raw.sam
+                fi
+
+        	$samtools view -@ $thread -T $refGenome -bS _raw.sam > _raw.bam
+        	rm _raw.sam
+
 		#=== If specify fastq_file1, then start from fastq to bam ===
 		#=== align to genome using bwa mem -q, such that secondary alignment will display original mapping quality ===
 	elif [ "$fastq_file1" != "" ]; then
