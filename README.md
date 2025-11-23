@@ -6,10 +6,10 @@ Challenges in the diagnosis of gene fusions include that there could be many and
 
 Equally important to a robust wet lab technology is a high-performing computational method for calling gene fusions, for which we develop SplitFusion ([Bian et al. SplitFusion enables ultrasensitive gene fusion detection and reveals fusion variant-associated tumor heterogeneity. Patterns, 2025](https://www.cell.com/patterns/fulltext/S2666-3899(25)00022-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2666389925000224%3Fshowall%3Dtrue)). SplitFusion leverages BWA-MEM split alignments, can detect cryptic splice-site fusions (e.g., EML4::ALK v3b and ARv7), call fusions involving highly repetitive gene partners (e.g., CIC::DUX4), and infer frame-ness and exon-boundary alignments for functional prediction and minimizing false positives. Using 1,848 datasets of various sizes, SplitFusion demonstrated superior sensitivity and specificity compared to three other tools. In 1,076 formalin-fixed paraffin-embedded lung cancer samples, SplitFusion identified novel fusions and revealed that EML4::ALK variant 3 was associated with multiple fusion variants coexisting in the same tumor. Additionally, SplitFusion can call targeted splicing variants. Using data from 515 The Cancer Genome Atlas (TCGA) samples, SplitFusion showed the highest sensitivity and *uncovered two cases of SLC34A2::ROS1 that were missed* in previous studies. These capabilities make SplitFusion highly suitable for clinical applications and the study of fusion-defined tumor heterogeneity.
 
-**|	Recurrent fusion	|	STAR-Fusion	|	TumorFusions	| FusionGDB |        SplitFusion |**
+|	Recurrent fusion	|	STAR-Fusion	|	TumorFusions	| FusionGDB |        SplitFusion | 
 | :---: | :---: | :---: | :---: | :---: | 
-|Positive (n = 22)|17|4|19|3|19|3|22|0|
-|Negative (n = 493)|0|467|0|493|0|492|2b|491|
+| Positive (n = 22) | 17 | 4 | 19 | 3 | 19 | 3 | 22 | 0 |
+| Negative (n = 493) | 0 | 467 | 0 | 493 | 0 | 492 | 491 |
 
 **SplitFusion** can be used for standard RNA-seq data and the Anchored Multiplex PCR (AMP) data.
 
